@@ -29,10 +29,9 @@ class Request_info_fetch_list(Request_info_list):
         for line in request_params_csv_list:
             try:
                 json_line = json.loads(line)
-                test = json_line['stream_params']
-                self.append_bt_request_json(username, api_key, json_line)
+                self.append_restful_bt_request_json(username, api_key, json_line)
             except:
-                self.append_bt_request(username, api_key, line)
+                self.append_restful_bt_request(username, api_key, line)
 
     def append_restful_bt_request_json(self, username, api_key, json_line):
         core_url_string = json_line['stream_params'][0]
@@ -47,7 +46,7 @@ class Request_info_fetch_list(Request_info_list):
 
 
         try:
-            users_feed_name = json_line['stream_params'][7].rstrip('\n')
+            users_feed_name = json_line['user_defined_name'].rstrip('\n')
         except:
             users_feed_name = ''
 
