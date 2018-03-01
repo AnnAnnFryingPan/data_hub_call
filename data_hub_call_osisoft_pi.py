@@ -42,7 +42,7 @@ class Data_hub_call_osisoft_pi(Data_hub_call):
             result['reason'] = hub_result.reason
 
         result['content'] = json.dumps(result_content_json)
-        new_content = []
+        available_matches = len(result_content_json['Items'])
 
         # No Date params allowed in call to hub, so apply get latest only to hub results here...
         if (get_latest_only and self.request_info.last_fetch_time != None):
@@ -60,8 +60,8 @@ class Data_hub_call_osisoft_pi(Data_hub_call):
                 result['ok'] = False
                 result['reason'] = 'Problem sorting results by date to get latest only. ' + str(e)
 
-        result['available_matches'] = len(result_content_json)
-        result['returned_matches'] = len(new_content)
+        result['available_matches'] = available_matches
+        result['returned_matches'] = len(result_content_json['Items'])
 
 
         # Set last_fetch_time for next call

@@ -1,7 +1,7 @@
 from request_info_list import Request_info_list
 from request_info import Request_info
 from request_info_restful_bt_fetch import Request_info_restful_bt_fetch, Feed_type, Request_type, Request_type_ds_or_features
-from request_info_restful_cdp_fetch import Request_info_restful_cdp_fetch, Feed_type, Request_type, Request_type_ds_or_features
+from request_info_restful_cdp_fetch import Request_info_restful_cdp_fetch, Element_type, Stream_type
 from request_info_osisoft_pi_fetch import Request_info_osisoft_pi_fetch, Feed_type_pi, Request_type_pi
 from enum import Enum
 from ast import literal_eval
@@ -35,7 +35,6 @@ class Request_info_fetch_list(Request_info_list):
 
     def append_restful_bt_request_json(self, username, api_key, json_line):
         core_url_string = json_line['stream_params'][0]
-        host = core_url_string.replace('https://', '').replace('http://', '').replace('/piwebapi', '')
         feed_type = Feed_type[json_line['stream_params'][1]]
         stream_id = json_line['stream_params'][2]
 
@@ -101,67 +100,33 @@ class Request_info_fetch_list(Request_info_list):
             #raise;
             print("Error adding new hypercat api stream to list: " + request_params_csv_line)
 
-    def append_restful_cdp_request_list(self, username, api_key, request_params_csv_list):
-
+    def append_restful_cdp_request_list(self, api_key, request_params_csv_list):
         # import hypercat streams
         for line in request_params_csv_list:
-            try:
-                json_line = json.loads(line)
-                test = json_line['stream_params']
-                self.append_restful_cdp_request_json(username, api_key, json_line)
-            except:
-                self.append_restful_cdp_request(username, api_key, line)
+            json_line = json.loads(line.rstrip('\n'))
+            self.append_restful_cdp_request_json(api_key, json_line)
 
-    def append_restful_cdp_request(self, username, api_key, request_params_csv_line):
-        # import hypercat stream
-        list_params = request_params_csv_line.split(",")
-        # http://api.bt-hypercat.com sensors 86a25d4e-25fc-4ebf-a00d-0a603858c7e1 datastreams 0 datapoints {} anns_feed_1
-        core_url_string = list_params[0]
-        feed_type = Feed_type[list_params[1]]
-        feed_id = list_params[2]
 
-        request_type_ds_or_features = Request_type_ds_or_features[list_params[3]]
-        datastream_id = int(list_params[4])
-        request_type = Request_type[list_params[5]]
-        params_list_str = literal_eval(list_params[6].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
-
-        try:
-            users_feed_name = list_params[7].rstrip('\n')
-        except:
-            users_feed_name = ''
-
-        if (len(list_params) > 8):
-            str_feed_info = ','.join(list_params[8:])
-            feed_info = json.loads(str_feed_info)
+    def append_restful_cdp_request_json(self, api_key, json_line):
+        #{"feed_info": {"href": "https://api.cityverve.org.uk/v1/entity/crime", "time_field": "entity.occurred"},
+        # "user_defined_name": "crimes",
+        # "stream_params": ["https://api.cityverve.org.uk", "v1", "entity", "crime", "", "static", "", "datapoints","{}"]}
+        stream_params = json_line['stream_params']
+        api_core_url= stream_params[0]
+        hub_version = stream_params[1]
+        element_type = Element_type[stream_params[2]]
+        element_id = stream_params[3]
+        instance_id = stream_params[4]
+        stream_type = Stream_type[stream_params[5]]
+        stream_id = stream_params[6]
+        if stream_params[7] == 'datapoints':
+            datapoints = True
         else:
-            feed_info = {}
+            datapoints = False
+        params_list_str = literal_eval(stream_params[8].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
 
         try:
-            self.requests.append(Request_info_restful_cdp_fetch(api_key, username,
-                                                               core_url_string, feed_type, feed_id,
-                                                               request_type_ds_or_features, datastream_id,
-                                                               request_type, params_list_str, users_feed_name,
-                                                               feed_info))
-            return self.requests[len(self.requests) - 1]
-
-        except:
-            # raise;
-            print("Error adding new hypercat api stream to list: " + request_params_csv_line)
-
-    def append_restful_cdp_request_json(self, username, api_key, json_line):
-        core_url_string = json_line['stream_params'][0]
-        host = core_url_string.replace('https://', '').replace('http://', '').replace('/piwebapi', '')
-        feed_type = Feed_type[json_line['stream_params'][1]]
-        stream_id = json_line['stream_params'][2]
-
-        request_type_ds_or_features = Request_type_ds_or_features[json_line['stream_params'][3]]
-        datastream_id = int(json_line['stream_params'][4])
-        request_type = Request_type[json_line['stream_params'][5]]
-        params_list_str = literal_eval(json_line['stream_params'][6].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
-
-
-        try:
-            users_feed_name = json_line['stream_params'][7].rstrip('\n')
+            users_feed_name = json_line['user_defined_name'].rstrip('\n')
         except:
             users_feed_name = ''
 
@@ -171,9 +136,8 @@ class Request_info_fetch_list(Request_info_list):
             feed_info = {}
 
         try:
-            self.requests.append(Request_info_restful_cdp_fetch(api_key, username,
-                core_url_string, feed_type, stream_id, request_type_ds_or_features, datastream_id,
-                request_type, params_list_str, users_feed_name, feed_info))
+            self.requests.append(Request_info_restful_cdp_fetch(api_key, api_core_url, hub_version, element_type, element_id, instance_id,
+                 stream_type, stream_id, datapoints, params_list_str, users_feed_name, feed_info))
             return self.requests[len(self.requests)-1]
 
         except:

@@ -11,8 +11,6 @@ class Data_hub_call_restful_bt(Data_hub_call):
             be used to connect to [stream] using [credentials]
          """
         self.request_info = request_info
-        #self.credentials = []
-        #self.credentials.append(BT_data_hub_credential(username, api_key))
 
 
     def call_api_fetch(self, params, output_format='application/json', get_latest_only=True):

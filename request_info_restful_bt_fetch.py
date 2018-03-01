@@ -67,4 +67,4 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
         return result
 
     def user_defined_name(self):
-        return self.csv_line_string(True)[7]
+        return self.users_feed_name

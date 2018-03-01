@@ -1,32 +1,20 @@
 from request_info import Request_info
 from enum import Enum
 
-
-class Feed_type(Enum):
-    __order__ = 'events locations sensors sensors2 journeys'
-    events = 1
-    locations = 2
-    sensors = 3
-    sensors2 = 4
-    journeys = 5
-
-class Request_type(Enum):
-    __order__ = 'none datapoints events'
+class Element_type(Enum):
+    __order__ = 'entity'
     none = 0
-    datapoints = 1
-    events = 2
+    entity = 1
 
 class Request_info_restful_cdp(Request_info):
-    """A data stream from any restful BT style platform/hub:
+    """A data stream from any restful CDP style platform/hub:
     """
 
     @staticmethod
-    def get_feed_types():
-        return [(e.value, e.name) for e in Feed_type]
+    def get_element_types():
+        return [(e.value, e.name) for e in Element_type]
 
-    @staticmethod
-    def get_request_types():
-        return [(e.value, e.name) for e in Request_type]
+
 
     """Attributes:
         api_core_url: The url of the data hub. eg 'http://api.bt-hypercat.com'
@@ -35,17 +23,20 @@ class Request_info_restful_cdp(Request_info):
         feed_type: either 'sensors', 'events', 'locations' or 'geo'
     """
 
-    def __init__(self, api_key, username, api_core_url, feed_type, feed_id, datastream_id,
-                 request_type, users_feed_name, feed_info):
+    def __init__(self, api_key, api_core_url, hub_version, element_type, element_id, instance_id,
+                 users_feed_name, feed_info):
 
         super(Request_info_restful_cdp, self).__init__(api_core_url, users_feed_name, feed_info)
 
-        self.api_key = api_key
-        self.username = username
-        self.feed_type = feed_type
-        self.feed_id = feed_id
-        self.datastream_id = datastream_id
-        self.request_type = request_type
+        self.api_key = api_key                  # https://api.cityverve.org.uk
+        self.hub_version = hub_version          # v1
+        self.element_type = element_type        # entity
+        self.element_id = element_id            # noise-meter
+        self.instance_id = instance_id          # 6472W
+        self.users_feed_name = users_feed_name  # My_feed_name
+        self.feed_info = feed_info              # {...}
+
+
 
 
 

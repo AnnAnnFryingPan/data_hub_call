@@ -11,6 +11,8 @@ class Data_hub_call(object):
         # "2017-10-11T11:26:05Z" (Triangulum/Pi recorded data style)
         # "2017-10-11T11:34:09.2461304Z" (Triangulum/Pi interpolated data style)
         # "Thu, 12 Oct 2017 14:30:05 GMT"(BT Datahub style)
+        # "2018-02-23T08:24:38.127Z" CDP date in accident entity.created field
+        # "2017-10-01" CDP date in crime entity.occurred field
 
         ######### Truncation ###########
         # remove trailing Z
@@ -23,6 +25,7 @@ class Data_hub_call(object):
         ########## Matching ###########
         try:
 
+            ### Triangulum like ###
             if (re.match("^((\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{6}))$", datetime_str)):
                 # EG: "2017-10-11T11:26:05.246130" (Triangulum/Pi 'interpolated' data style - after truncation)
                 result = datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f')
@@ -31,6 +34,8 @@ class Data_hub_call(object):
                 result = datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S')
             elif (re.match("^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$", datetime_str)):
                 result = datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M')
+
+            ### BT like ###
             elif(re.match("^(\w{3}), (\d{2}) (\w{3}) (\d{4}) (\d{2}):(\d{2}):(\d{2}) GMT$", datetime_str)):
                 # EG: "Thu, 12 Oct 2017 14:30:05 GMT" (BT Data hub style)
                 result = datetime.datetime.strptime(datetime_str, '%a, %d %b %Y %H:%M:%S %Z')
@@ -43,6 +48,15 @@ class Data_hub_call(object):
             elif (re.match("^(\w{3}) (\d{2}) (\w{3}) (\d{4}) (\d{2}):(\d{2}):(\d{2})$", datetime_str)):
                 # EG: "Thu 12 Oct 2017 14:30:05"
                 result = datetime.datetime.strptime(datetime_str, '%a %d %b %Y %H:%M:%S')
+
+            ### CDP like ###
+            elif (re.match("^((\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3}))$", datetime_str)):
+                # EG: "2018-02-23T08:24:38.127Z" (CDP date in accident entity.created field)
+                result = datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f')
+            elif (re.match("^((\d{4})-(\d{2})-(\d{2}))$", datetime_str)):
+                # EG: "2017-10-01" CDP date in crime entity.occurred field
+                result = datetime.datetime.strptime(datetime_str, '%Y-%m-%d')
+
             else:
                 result = parse(datetime_str)
         except:
