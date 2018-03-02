@@ -27,18 +27,14 @@ class Data_hub_call_restful_cdp(Data_hub_call):
         hub_result = self.get_request(url_string, params, output_format, temp_get_latest)
 
 
-        result['ok'] = hub_result.ok
-        if (hub_result.ok):
-            result_content = hub_result.content.decode("utf-8")
-        else:
-            result_content = '{}'
-            result['reason'] = hub_result.reason
+        result_content = hub_result.content.decode("utf-8")
+
 
         json_result_content = json.loads(result_content)
 
         ###### Due to CDP having to fetch children [1] ######
         # Get entity children
-        if hub_result.ok and get_children_as_time_series:
+        if get_children_as_time_series:
             json_result_children = []
             for entity in json_result_content:
                 if 'uri' in entity:
@@ -78,7 +74,7 @@ class Data_hub_call_restful_cdp(Data_hub_call):
 
         # Set last_fetch_time for next call
         newlist = []
-        if hub_result.ok and get_latest_only:
+        if get_latest_only:
             if len(json_result_content) > 0:
                 try:
                     newlist = sorted(json_result_content,
@@ -109,20 +105,26 @@ class Data_hub_call_restful_cdp(Data_hub_call):
             if 'start' in params:
                 del params['start']
 
-        return requests.get(    url,
+        try:
+            hub_result = requests.get(url,
                                 timeout=10.000,
                                 params=params,
                                 headers=headers_list)
+            if hub_result.ok == False:
+                raise ConnectionRefusedError("Connection to CDP refused: " + hub_result.reason)
+        except:
+            raise ConnectionError("Error connecting to CDP hub - check internet connection.")
+
+        return hub_result
+
 
 
 
     def get_child_for_time_series(self, uri, params, output_format='application/json', get_latest_only=True):
         # Make request to CDP hub
         hub_result = self.get_request(uri, params, output_format, get_latest_only)
-        if (hub_result.ok):
-            return json.loads(hub_result.content.decode("utf-8"))
-        else:
-            return None
+        return json.loads(hub_result.content.decode("utf-8"))
+
 
     def get_children_as_time_series(self, json_children, time_field="entity.occurred"):
         result = []

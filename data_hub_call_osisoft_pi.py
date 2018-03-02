@@ -31,15 +31,15 @@ class Data_hub_call_osisoft_pi(Data_hub_call):
         # passing the username and required output format
         headers_list = {"Accept": output_format, "Host": self.request_info.host}
 
-        hub_result = requests.get(url_string, headers=headers_list, timeout=10.000, verify=False)
+        try:
+            hub_result = requests.get(url_string, headers=headers_list, timeout=10.000, verify=False)
+            if hub_result.ok == False:
+                raise ConnectionRefusedError("Connection to Triangulum hub refused: " + hub_result.reason)
+        except:
+            raise ConnectionError("Error connecting to Triangulum hub - check internet connection.")
 
         result = {}
-        result['ok'] = hub_result.ok
-        if(hub_result.ok):
-            result_content_json = hub_result.json()
-        else:
-            result_content_json = {}
-            result['reason'] = hub_result.reason
+        result_content_json = hub_result.json()
 
         result['content'] = json.dumps(result_content_json)
         available_matches = len(result_content_json['Items'])
@@ -65,7 +65,7 @@ class Data_hub_call_osisoft_pi(Data_hub_call):
 
 
         # Set last_fetch_time for next call
-        if (hub_result.ok and get_latest_only):
+        if (get_latest_only):
             if (len(result_content_json['Items']) > 0):
                 try:
                     newlist = sorted(result_content_json['Items'],

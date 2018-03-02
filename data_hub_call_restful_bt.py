@@ -30,24 +30,23 @@ class Data_hub_call_restful_bt(Data_hub_call):
             if 'start' in params:
                 del params['start']
 
-        hub_result = requests.get(url_string,
-                            timeout=10.000,
-                            auth=(self.request_info.api_key, ':'),
-                            params=params,
-                            headers=headers_list)
+        try:
+            hub_result = requests.get(url_string,
+                                timeout=10.000,
+                                auth=(self.request_info.api_key, ':'),
+                                params=params,
+                                headers=headers_list)
+            if hub_result.ok == False:
+                raise ConnectionRefusedError("Connection to BT-Hub refused: " + hub_result.reason)
+        except:
+            raise ConnectionError("Error connecting to BT-hub - check internet connection.")
 
-
-        result['ok'] = hub_result.ok
-        if (hub_result.ok):
-            result_content = hub_result.content.decode("utf-8")
-        else:
-            result_content = '{}'
-            result['reason'] = hub_result.reason
+        result_content = hub_result.content.decode("utf-8")
 
         json_result_content = json.loads(result_content)
         newlist = []
 
-        if(hub_result.ok and get_latest_only):
+        if(get_latest_only):
             if(len(json_result_content) > 0):
                 try:
                     newlist = sorted(json_result_content,
