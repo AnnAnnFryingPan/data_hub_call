@@ -8,7 +8,7 @@ import json
 
 
 HUB_API_BT = 'http://api.bt-hypercat.com'
-HUB_API_CDP = 'http://api.cityverve.org.uk/v1/'
+HUB_API_CDP = 'https://api.cityverve.org.uk'
 HUB_API_TRIANGULUM = 'https://130.88.97.137/piwebapi'
 
 
@@ -28,7 +28,7 @@ class Request_info_fetch_list(Request_info_list):
     def clear_all(self):
         self.requests = []
 
-    def append_request(self, request_params, api_key, username=None):
+    def append_request(self, request_params, api_key=None, username=None):
         try:
             hub_api = json.loads(request_params)['stream_params'][0]
         except:
@@ -38,13 +38,13 @@ class Request_info_fetch_list(Request_info_list):
             self.append(Request_info_restful_bt_fetch(username, api_key, request_params))
         elif (hub_api == HUB_API_TRIANGULUM):
             self.append(Request_info_osisoft_pi_fetch(request_params))
-        elif (hub_api == HUB_API_CDP):  # "https://130.88.97.137/piwebapi"):
+        elif (hub_api == HUB_API_CDP):
             self.append(Request_info_restful_cdp_fetch(api_key, request_params))
         else:
             raise
 
 
-    def append_request_list(self, request_params_list, api_key, username=None):
+    def append_request_list(self, request_params_list, api_key=None, username=None):
         # import hypercat streams
         for line in request_params_list:
             self.append_request(line, api_key, username)

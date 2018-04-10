@@ -19,11 +19,12 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
     def get_stream_types():
         return [(e.value, e.name) for e in Stream_type]
 
-    def __init__(self, api_key, request_params_json):
+    def __init__(self, api_key, params):
         # {"feed_info": {"href": "https://api.cityverve.org.uk/v1/entity/crime", "time_field": "entity.occurred"},
         # "user_defined_name": "crimes",
         # "stream_params": ["https://api.cityverve.org.uk", "v1", "entity", "crime", "", "static", "", "datapoints","{}"]}
-        stream_params = request_params_json['stream_params']
+        params_json = json.loads(params)
+        stream_params = params_json['stream_params']
         api_core_url = stream_params[0]
         hub_version = stream_params[1]
         element_type = Element_type[stream_params[2]]
@@ -38,12 +39,12 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
         params_list_str = literal_eval(stream_params[8].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
 
         try:
-            users_feed_name = request_params_json['user_defined_name'].rstrip('\n')
+            users_feed_name = params_json['user_defined_name'].rstrip('\n')
         except:
             users_feed_name = ''
 
-        if 'feed_info' in request_params_json:
-            feed_info = request_params_json['feed_info']
+        if 'feed_info' in params_json:
+            feed_info = params_json['feed_info']
         else:
             feed_info = {}
 
@@ -63,7 +64,7 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
 
         except:
             # raise;
-            print("Error creating new request (cdp): " + json.dumps(request_params_json))
+            print("Error creating new request (cdp): " + json.dumps(params_json))
 
 
 

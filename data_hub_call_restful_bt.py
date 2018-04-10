@@ -36,10 +36,11 @@ class Data_hub_call_restful_bt(Data_hub_call):
                                 auth=(self.request_info.api_key, ':'),
                                 params=params,
                                 headers=headers_list)
-            if hub_result.ok == False:
-                raise ConnectionRefusedError("Connection to BT-Hub refused: " + hub_result.reason)
         except:
             raise ConnectionError("Error connecting to BT-hub - check internet connection.")
+        if hub_result.ok == False:
+                raise ConnectionRefusedError("Connection to BT-Hub refused: " + hub_result.reason)
+
 
         result_content = hub_result.content.decode("utf-8")
 

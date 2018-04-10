@@ -23,33 +23,33 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
     def get_request_type_ds_or_features():
         return [(e.value, e.name) for e in Request_type_ds_or_features]
 
-    def __init__(self, username, api_key, request_params):
+    def __init__(self, username, api_key, params):
         try:
-            json_request_params = json.loads(request_params)
-            self.init_json(username, api_key, json_request_params)
+            json_params = json.loads(params)
+            self.init_json(username, api_key, json_params)
         except:
-            self.init_string(username, api_key, request_params)
+            self.init_string(username, api_key, params)
 
 
 
-    def init_json(self, username, api_key, json_line):
-        core_url = json_line['stream_params'][0]
-        feed_type = Feed_type[json_line['stream_params'][1]]
-        feed_id = json_line['stream_params'][2]
+    def init_json(self, username, api_key, params):
+        core_url = params['stream_params'][0]
+        feed_type = Feed_type[params['stream_params'][1]]
+        feed_id = params['stream_params'][2]
 
-        request_type_ds_or_features = Request_type_ds_or_features[json_line['stream_params'][3]]
-        datastream_id = int(json_line['stream_params'][4])
-        request_type = Request_type[json_line['stream_params'][5]]
-        params_list_str = literal_eval(json_line['stream_params'][6].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
+        request_type_ds_or_features = Request_type_ds_or_features[params['stream_params'][3]]
+        datastream_id = int(params['stream_params'][4])
+        request_type = Request_type[params['stream_params'][5]]
+        params_list_str = literal_eval(params['stream_params'][6].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
 
 
         try:
-            users_feed_name = json_line['user_defined_name'].rstrip('\n')
+            users_feed_name = params['user_defined_name'].rstrip('\n')
         except:
             users_feed_name = ''
 
-        if 'feed_info' in json_line:
-            feed_info = json_line['feed_info']
+        if 'feed_info' in params:
+            feed_info = params['feed_info']
         else:
             feed_info = {}
 
@@ -67,14 +67,14 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             self.params = params_list_str
         except:
             #raise;
-            print("Error creating new request (bt): " + json.dumps(json_line))
+            print("Error creating new request (bt): " + json.dumps(params))
 
 
 
 
-    def init_string(self, username, api_key, request_params_csv_line):
+    def init_string(self, username, api_key, params):
         # import hypercat stream
-        list_params = request_params_csv_line.split(",")
+        list_params = params.split(",")
         # http://api.bt-hypercat.com sensors 86a25d4e-25fc-4ebf-a00d-0a603858c7e1 datastreams 0 datapoints {} anns_feed_1
         core_url_string = list_params[0]
         feed_type = Feed_type[list_params[1]]
@@ -110,7 +110,7 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             self.params = params_list_str
         except:
             #raise;
-            print("Error creating new request (bt): " + request_params_csv_line)
+            print("Error creating new request (bt): " + params)
 
 
     def url_string(self):
