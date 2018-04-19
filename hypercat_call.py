@@ -4,9 +4,7 @@ import json
 class Hypercat_call(object):
     """A connection/call to the BT Hypercat search facility"""
 
-    core_URL = "http://search.bt-hypercat.com/cat"
-
-    def call_hypercat_search(self, url, cat_url, json_content={}, request_type='get', headers_list={}, auth=()):
+    def call_hypercat_search(self, url, cat_url, json_content={}, request_type='get', headers_list={}):
         result = {}
 
         if cat_url:
@@ -25,7 +23,6 @@ class Hypercat_call(object):
                                     headers=headers_list,
                                     params=payload,
                                     timeout=20.000,
-                                    #auth=auth,
                                     json= json_content)
         except Exception as err:
             result['ok'] = False
@@ -50,14 +47,43 @@ class Hypercat_call(object):
 
         return result
 
-    def get_hypercat_catalogue(self, url, headers_list={}, auth=()):
+    def call_hypercat_search_cdp(self, url, headers_list={}):
+        result = {}
+
+        try:
+            search_result = requests.get(url,
+                                         timeout=20.000,
+                                         headers=headers_list)
+        except Exception as err:
+            result['ok'] = False
+            result['content'] = err
+            return result
+
+        try:
+            result_content = search_result.json()
+        except:
+            try:
+                result_content = json.loads(search_result.content)
+            except:
+                try:
+                    result_content = search_result.content
+                except Exception as err2:
+                    result['ok'] = False
+                    result['content'] = err2
+                    return result
+
+        result['ok'] = search_result.ok
+        result['content'] = result_content
+
+        return result
+
+    def get_hypercat_catalogue(self, url, headers_list={}):
         result = {}
 
         try:
             search_result = requests.get(url,
                                          timeout=50.000,
                                          headers=headers_list,
-                                         #auth=auth
                                          )
         except Exception as err:
             result['ok'] = False

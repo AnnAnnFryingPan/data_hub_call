@@ -1,12 +1,14 @@
 import os
 from data_hub_call_restful_bt import  Data_hub_call_restful_bt
 from data_hub_call_osisoft_pi import Data_hub_call_osisoft_pi
+from data_hub_call_restful_cdp import Data_hub_call_restful_cdp
 from request_info_fetch_list import Request_info_fetch_list, Data_request_type
 import json
 
 
 class Selected_streams(object):
-    def __init__(self, data_sources_path):
+    def __init__(self, data_sources_path, identifier):
+        self.identifier = identifier
         self.data_source_dir = data_sources_path
         self.restful_bt_sources_dir = 'restful_bt_sources'
         self.bt_requests_filename = 'list_restful_bt_requests.csv'
@@ -21,10 +23,13 @@ class Selected_streams(object):
         file_name_bt = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
         file_name_tri = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir,
                                      self.triangulum_requests_filename)
+        file_name_cdp = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         if not os.path.exists(os.path.dirname(file_name_bt)):
             os.makedirs(os.path.dirname(file_name_bt), exist_ok=True)
         if not os.path.exists(os.path.dirname(file_name_tri)):
             os.makedirs(os.path.dirname(file_name_tri), exist_ok=True)
+        if not os.path.exists(os.path.dirname(file_name_cdp)):
+            os.makedirs(os.path.dirname(file_name_cdp), exist_ok=True)
 
         self.api_streams = Request_info_fetch_list()
 
@@ -51,9 +56,21 @@ class Selected_streams(object):
             # 2. Triangulum
             # Triangulum doesn't require credentials to access streams
             #file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_credentials_filename)
-        #elif (hub.api_core_url == "http://35.176.23.252:8000"):
+        elif (hub.api_core_url == "https://api.cityverve.org.uk/v1/"):
             # 3. CDP
-            #TODO insert CDP creds
+            file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_credentials_filename)
+            cred_csv_line = credential['api_key'] + ',' + credential['username']
+
+            if not os.path.exists(os.path.dirname(file_name)):
+                os.makedirs(os.path.dirname(file_name), exist_ok=True)
+
+            try:
+                with open(file_name, "w") as fp:
+                    fp.write(cred_csv_line)
+                    fp.close()
+            except Exception as err:
+                print(
+                    'Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
 
     def get_selected_stream_ids(self):
         return self.api_streams.get_list_of_users_stream_ids()
@@ -147,6 +164,10 @@ class Selected_streams(object):
             with open(os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir,
                                         self.triangulum_requests_filename), "w+") as f_out:
                 f_out.writelines(new_file)
+        if os.path.exists(os.path.dirname(os.path.join(self.data_source_dir, self.cdp_sources_dir))):
+            with open(os.path.join(self.data_source_dir, self.cdp_sources_dir,
+                                        self.cdp_requests_filename), "w+") as f_out:
+                f_out.writelines(new_file)
 
 
     def remove_from_streams(self, stream_params):
@@ -157,6 +178,8 @@ class Selected_streams(object):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
         elif (hub_url == Data_hub_call_osisoft_pi.core_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
+        elif (hub_url == Data_hub_call_cdp.core_URL):
+            file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
             raise
 
@@ -189,6 +212,8 @@ class Selected_streams(object):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
         elif (hub_url == Data_hub_call_osisoft_pi.core_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
+        elif (hub_url == Data_hub_call_cdp.core_URL):
+            file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
             raise
 
