@@ -10,7 +10,11 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
             json_params = json.loads(params)
             self.init_pi_request_json(json_params)
         except:
-            self.init_pi_request(params, metadata)
+            try:
+                json_params_str = json.dumps(params)
+                self.init_pi_request_json(params)
+            except:
+                self.init_pi_request(params, metadata)
 
 
 
@@ -26,7 +30,10 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
             request_type = Request_type_pi.none
         else:
             feed_type = Feed_type_pi[params['stream_params'][1]]
-            request_type = Request_type_pi[params['stream_params'][3].rstrip('\n')]
+            if len(params['stream_params']) > 3:
+                request_type = Request_type_pi[params['stream_params'][3].rstrip('\n')]
+            else:
+                request_type = Request_type_pi.none
         try:
             users_feed_name = params['user_defined_name'].rstrip('\n')
         except:

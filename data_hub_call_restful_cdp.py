@@ -18,7 +18,7 @@ class Data_hub_call_restful_cdp(Data_hub_call):
 
 
     def call_api_fetch(self, params, output_format='application/json', get_latest_only=True,
-                       get_children_as_time_series=True, time_field="entity.occurred"):
+                       get_children_as_time_series=True, time_field="entity.occurred", value_field="value"):
         result = {}
 
         # Make request to CDP hub
@@ -126,7 +126,7 @@ class Data_hub_call_restful_cdp(Data_hub_call):
         return json.loads(hub_result.content.decode("utf-8"))
 
 
-    def get_children_as_time_series(self, json_children, time_field="entity.occurred"):
+    def get_children_as_time_series(self, json_children, time_field="entity.occurred", value_field="value"):
         result = []
         time_field_as_path_list = time_field.strip().split(".")
         if len(time_field_as_path_list) == 0:
