@@ -30,7 +30,10 @@ class Selected_streams(object):
         if not os.path.exists(os.path.dirname(file_name_cdp)):
             os.makedirs(os.path.dirname(file_name_cdp), exist_ok=True)
 
-        self.api_streams = Request_info_fetch_list()
+        try:
+            self.api_streams = Request_info_fetch_list()
+        except Exception as err:
+            raise err
 
     def write_credentials(self, hub, credential):
         # 8a0b0d8c-bf4e-44d5-b34d-a2d5f139918a,AnnGledson
@@ -48,8 +51,7 @@ class Selected_streams(object):
                     fp.write(cred_csv_line)
                     fp.close()
             except Exception as err:
-                print(
-                    'Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
+                raise IOError('Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
 
         #elif (hub.api_core_url == "https://130.88.97.137/piwebapi"):
             # 2. Triangulum
@@ -68,8 +70,7 @@ class Selected_streams(object):
                     fp.write(cred_csv_line)
                     fp.close()
             except Exception as err:
-                print(
-                    'Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
+                raise IOError('Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
 
     def get_selected_stream_ids(self):
         return self.api_streams.get_list_of_users_stream_ids()
@@ -130,7 +131,7 @@ class Selected_streams(object):
                 api_key = list_params.rstrip('\n')
         except Exception as err:
             print('Unable to read CDP credentials file ' + self.cdp_credentials_filename + ' file in '
-            + self.restful_cdp_sources_dir + '. ' + str(err))
+            + self.cdp_sources_dir + '. ' + str(err))
         else:
             try:
                 with open(os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)) \
@@ -138,7 +139,7 @@ class Selected_streams(object):
                     api_streams_csv_list.extend(f_requests.readlines())
             except Exception as err:
                 print('Unable to read CDP streams file ' + self.cdp_requests_filename + ' file in '
-                    + self.restful_cdp_sources_dir + '. ' + str(err))
+                    + self.cdp_sources_dir + '. ' + str(err))
 
 
         for stream_params_str in api_streams_csv_list:
@@ -177,10 +178,10 @@ class Selected_streams(object):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
         elif (hub_url == Data_hub_call_osisoft_pi.core_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
-        elif (hub_url == Data_hub_call_cdp.core_URL):
+        elif (hub_url == Data_hub_call_restful_cdp.core_URL):
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
-            raise
+            raise NameError('Unrecognised hub url: ' + hub_url)
 
         if not os.path.exists(os.path.dirname(file_name)):
             os.makedirs(os.path.dirname(file_name), exist_ok=True)
@@ -195,8 +196,7 @@ class Selected_streams(object):
                 fp.truncate()
                 fp.close()
         except Exception as err:
-            print(
-                'Unable to read streams file: ' + file_name + '. ' + str(err))
+            raise IOError('Unable to read streams file: ' + file_name + '. ' + str(err))
 
         self.get_streams_from_file()
 
@@ -211,10 +211,10 @@ class Selected_streams(object):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
         elif (hub_url == Data_hub_call_osisoft_pi.core_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
-        elif (hub_url == Data_hub_call_cdp.core_URL):
+        elif (hub_url == Data_hub_call_restful_cdp.core_URL):
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
-            raise
+            raise NameError('Unrecognised hub url: ' + hub_url)
 
         if not os.path.exists(os.path.dirname(file_name)):
             os.makedirs(os.path.dirname(file_name), exist_ok=True)
@@ -233,8 +233,7 @@ class Selected_streams(object):
                     fp.write(str_stream_params+'\n')  # append missing data
                 fp.close()
         except Exception as err:
-            print(
-                'Unable to read streams file: ' + file_name + '. ' + str(err))
+            raise IOError('Unable to read streams file: ' + file_name + '. ' + str(err))
 
         self.get_streams_from_file()
 
