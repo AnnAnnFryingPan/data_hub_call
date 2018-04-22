@@ -7,8 +7,7 @@ import json
 
 
 class Selected_streams(object):
-    def __init__(self, data_sources_path, identifier='default-id'):
-        self.identifier = identifier
+    def __init__(self, data_sources_path):
         self.data_source_dir = data_sources_path
         self.restful_bt_sources_dir = 'restful_bt_sources'
         self.bt_requests_filename = 'list_restful_bt_requests.csv'
