@@ -8,7 +8,7 @@ import json
 
 
 HUB_API_BT = 'http://api.bt-hypercat.com'
-HUB_API_CDP = 'https://api.cityverve.org.uk'
+HUB_API_CDP = 'https://api.cityverve.org.uk/v1'
 HUB_API_TRIANGULUM = 'https://130.88.97.137/piwebapi'
 
 
@@ -41,7 +41,7 @@ class Request_info_fetch_list(Request_info_list):
         elif (hub_api == HUB_API_CDP):
             self.append(Request_info_restful_cdp_fetch(api_key, request_params))
         else:
-            raise
+            raise ValueError("Unknown hub api as first value in 'stream_params' list: " + hub_api)
 
 
     def append_request_list(self, request_params_list, api_key=None, username=None):

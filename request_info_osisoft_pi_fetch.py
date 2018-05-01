@@ -8,17 +8,21 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
     def __init__(self, params, metadata=False):
         try:
             json_params = json.loads(params)
-            self.init_pi_request_json(json_params)
+            self.init_json(json_params)
         except:
             try:
                 json_params_str = json.dumps(params)
-                self.init_pi_request_json(params)
+                self.init_json(params)
             except:
-                self.init_pi_request(params, metadata)
+                try:
+                    self.init_csv(params, metadata)
+                except Exception as err:
+                    raise err
 
 
 
-    def init_pi_request_json(self, params, metadata=False):
+
+    def init_json(self, params, metadata=False):
         # https://130.88.97.137/piwebapi,streams,A0EXpbRmwnc7kq0OSy1LydJJQxey0y1BT5hGA3gBQVqtCQgLR6A7xNbjk6RXQ6dns2
         # VqAVk0tUEktUDAxLkRTLk1BTi5BQy5VS1xUUklBTkdVTFVNXEFJUiBRVUFMSVRZXE9YRk9SRCBST0FEfE5PIExFVkVM,
         # interpolated,Anns_Pi_feed_Nitrogen
@@ -53,9 +57,9 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
                                                                 users_feed_name,
                                                                 feed_info)
         except:
-            print("Error creating new request (triangulum): " + json.dumps(params))
+            raise ValueError("Error creating new request (triangulum): " + json.dumps(params))
 
-    def init_pi_request(self, params, metadata=False):
+    def init_csv(self, params, metadata=False):
         list_params = params.split(",")
         # https://130.88.97.137/piwebapi,streams,A0EXpbRmwnc7kq0OSy1LydJJQxey0y1BT5hGA3gBQVqtCQgLR6A7xNbjk6RXQ6dns2
         # VqAVk0tUEktUDAxLkRTLk1BTi5BQy5VS1xUUklBTkdVTFVNXEFJUiBRVUFMSVRZXE9YRk9SRCBST0FEfE5PIExFVkVM,
@@ -89,7 +93,7 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
                                                                 users_feed_name,
                                                                 feed_info)
         except:
-            print("Error creating new request (triangulum): " + params)
+            raise ValueError("Error creating new request (triangulum): " + params)
 
 
 

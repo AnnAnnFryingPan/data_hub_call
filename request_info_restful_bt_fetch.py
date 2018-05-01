@@ -28,7 +28,14 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             json_params = json.loads(params)
             self.init_json(username, api_key, json_params)
         except:
-            self.init_string(username, api_key, params)
+            try:
+                json_params_str = json.dumps(params)
+                self.init_json(username, api_key, params)
+            except:
+                try:
+                    self.init_csv(username, api_key, params)
+                except Exception as err:
+                    raise err
 
 
 
@@ -66,13 +73,10 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             self.request_type_ds_or_feature = request_type_ds_or_features
             self.params = params_list_str
         except:
-            #raise;
-            print("Error creating new request (bt): " + json.dumps(params))
+            raise ValueError("Error creating new request (BT Hub): " + json.dumps(params))
 
 
-
-
-    def init_string(self, username, api_key, params):
+    def init_csv(self, username, api_key, params):
         # import hypercat stream
         list_params = params.split(",")
         # http://api.bt-hypercat.com sensors 86a25d4e-25fc-4ebf-a00d-0a603858c7e1 datastreams 0 datapoints {} anns_feed_1
@@ -109,8 +113,7 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             self.request_type_ds_or_feature = request_type_ds_or_features
             self.params = params_list_str
         except:
-            #raise;
-            print("Error creating new request (bt): " + params)
+            raise ValueError("Error creating new request (BT Hub): " + params)
 
 
     def url_string(self):

@@ -59,21 +59,27 @@ class Hypercat_call(object):
             result['content'] = err
             return result
 
-        try:
-            result_content = search_result.json()
-        except:
-            try:
-                result_content = json.loads(search_result.content)
-            except:
+        else:
+            if search_result.ok == False:
+                result['ok'] = False
+                result['content'] = search_result.reason
+                return result
+            else:
                 try:
-                    result_content = search_result.content
-                except Exception as err2:
-                    result['ok'] = False
-                    result['content'] = err2
-                    return result
+                    result_content = search_result.json()
+                except:
+                    try:
+                        result_content = json.loads(search_result.content)
+                    except:
+                        try:
+                            result_content = search_result.content
+                        except Exception as err2:
+                            result['ok'] = False
+                            result['content'] = err2
+                            return result
 
-        result['ok'] = search_result.ok
-        result['content'] = result_content
+                result['ok'] = search_result.ok
+                result['content'] = result_content
 
         return result
 

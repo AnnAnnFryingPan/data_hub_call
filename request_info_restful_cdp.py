@@ -23,18 +23,14 @@ class Request_info_restful_cdp(Request_info):
         feed_type: either 'sensors', 'events', 'locations' or 'geo'
     """
 
-    def __init__(self, api_key, api_core_url, hub_version, element_type, element_id, instance_id,
+    def __init__(self, api_key, api_core_url, request_type, sub_cat_name, stream_id,
                  users_feed_name, feed_info):
-
         super(Request_info_restful_cdp, self).__init__(api_core_url, users_feed_name, feed_info)
 
-        self.api_key = api_key                  # https://api.cityverve.org.uk
-        self.hub_version = hub_version          # v1
-        self.element_type = element_type        # entity
-        self.element_id = element_id            # noise-meter
-        self.instance_id = instance_id          # 6472W
-        self.users_feed_name = users_feed_name  # My_feed_name
-        self.feed_info = feed_info              # {...}
+        self.api_key = api_key                  # https://api.cityverve.org.uk/v1
+        self.request_type = request_type        # entity
+        self.sub_cat_name = sub_cat_name        # air-quality-no2
+        self.stream_id = stream_id              # 5db42367b00845dc44092a8b0dbe9892
 
 
 

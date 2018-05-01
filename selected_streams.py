@@ -106,7 +106,10 @@ class Selected_streams(object):
                     + self.restful_bt_sources_dir + '. ' + str(err))
 
         for stream_params_str in api_streams_csv_list:
-            self.api_streams.append_request(stream_params_str, api_key, username)
+            try:
+                self.api_streams.append_request(stream_params_str, api_key, username)
+            except Exception as err:
+                print('Unable to poll BT stream: ' + stream_params_str + '... ' + str(err))
         api_streams_csv_list.clear()
 
         # Get the streams as CSV from the Triangulum file
@@ -120,7 +123,11 @@ class Selected_streams(object):
                   + self.restful_triangulum_sources_dir + '. ' + str(err))
 
         for stream_params_str in api_streams_csv_list:
-            self.api_streams.append_request(stream_params_str)
+            try:
+                self.api_streams.append_request(stream_params_str)
+            except Exception as err:
+                print('Unable to poll Triangulum stream: ' + stream_params_str + '... ' + str(err))
+
         api_streams_csv_list.clear()
 
         try:
@@ -143,7 +150,10 @@ class Selected_streams(object):
 
 
         for stream_params_str in api_streams_csv_list:
-            self.api_streams.append_request(stream_params_str, api_key)
+            try:
+                self.api_streams.append_request(stream_params_str, api_key)
+            except Exception as err:
+                print('Unable to poll CDP stream: ' + stream_params_str + '... ' + str(err))
 
 
     def clear_all_streams(self):
