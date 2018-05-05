@@ -1,11 +1,23 @@
+from __future__ import generators
 import datetime
 import re
 from dateutil.parser import parse
+from abc import ABCMeta, abstractmethod
+
 
 
 class Data_hub_call(object):
     """A data hub call:
     """
+
+    def __init__(self, core_url, request_info, hub_id):
+        self. core_URL = core_url
+        self.request_info = request_info
+        self.hub_id = hub_id
+
+    @abstractmethod
+    def get_influx_db_import_json(self, response, stream_name, feed_info):
+        pass
 
     def get_date_time(self, datetime_str):
         # "2017-10-11T11:26:05Z" (Triangulum/Pi recorded data style)
@@ -63,3 +75,24 @@ class Data_hub_call(object):
             raise ValueError('Unable to format datetime from given string: ' + datetime_str)
 
         return result
+
+    def is_int(self, s):
+        try:
+            int(s)
+            return True
+        except:
+            return False
+
+    def is_float(self, s):
+        try:
+            float(s)
+            return True
+        except:
+            return False
+
+    def is_dict(self, s):
+        try:
+            dict(s)
+            return True
+        except:
+            return False

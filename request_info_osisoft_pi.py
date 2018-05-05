@@ -35,12 +35,14 @@ class Request_info_osisoft_pi(Request_info):
     def get_request_types():
         return [(e.value, e.name) for e in Request_type_pi]
 
+    HUB_ID = 'Triangulum'
+    HUB_CALL_CLASSNAME = 'Data_hub_call_osisoft_pi'
 
     def __init__(self, host, api_core_url, feed_type, params, request_type, users_feed_name, feed_info):
 
-        super(Request_info_osisoft_pi, self).__init__(api_core_url, users_feed_name, feed_info)
+        super(Request_info_osisoft_pi, self).__init__(api_core_url, users_feed_name, feed_info,
+                                                      self.HUB_ID, self.HUB_CALL_CLASSNAME)
 
-        #https://myserver/piwebapi/
         self.host = host
         self.feed_type = feed_type
         self.params = params

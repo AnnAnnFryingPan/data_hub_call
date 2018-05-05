@@ -8,18 +8,70 @@ TIMESERIES_VALUE_FIELD = ["latest","value"]
 
 class Data_hub_call_restful_cdp(Data_hub_call):
 
-    #core_URL_test = "http://35.176.23.252:8000"
-    core_URL = "https://api.cityverve.org.uk/v1"
+    CORE_URL = "https://api.cityverve.org.uk/v1"
+    HUB_ID = 'CDP'
 
     def __init__(self, request_info): #, username, api_key):
         """Return a CDP connection object which will
             be used to connect to [stream] using [credentials]
          """
-        self.request_info = request_info
+        super(Data_hub_call_restful_cdp, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
+
+    class Factory:
+        def create(self, request): return Data_hub_call_restful_cdp(request)
+
+    def get_influx_db_import_json(self, response, stream_name, feed_info):
+        """
+        :param response: [
+              {
+                "time": "Tue, 30 May 2017 15:30:04 GMT",
+                "value": "556"
+              },
+              {
+                "time": "Tue, 30 May 2017 15:15:05 GMT",
+                "value": "526"
+              },
+              {
+                "time": "Tue, 30 May 2017 15:00:04 GMT",
+                "value": "507"
+              },
+              ...
+        ]
+        :param stream_name:
+            eg: 'Manchester_carpark_spinningfields'
+        """
 
 
-    def call_api_fetch(self, params, output_format='application/json', get_latest_only=True,
-                       time_field=TIMESERIES_TIME_FIELD, value_field=TIMESERIES_VALUE_FIELD):
+        json_body_hypercat = json.loads(response)
+
+        # Reformat JSON to be input into influx db.
+        for item in json_body_hypercat:
+            item['measurement'] = stream_name
+            item['fields'] = {}
+            if(self.is_int(item['value'])):
+                item['fields']['value'] = int(item['value'])
+            elif(self.is_float(item['value'])):
+                item['fields']['value'] = float(item['value'])
+            else:
+                item['fields']['value'] = item['value']
+
+            if('tagNames' in feed_info and len(feed_info['tagNames']) > 0):
+                item['fields']['tagNames'] = feed_info['tagNames']
+            item["tags"] = {}
+            if('unitText' in feed_info and len(feed_info['unitText'].strip()) > 0):
+                item["tags"]["unitText"] = feed_info['unitText'].strip()
+            if('longitude' in feed_info and feed_info['longitude'] != None):
+                item["tags"]["longitude"] = feed_info['longitude']
+            if ('latitude' in feed_info and feed_info['latitude'] != None):
+                item["tags"]["latitude"] = feed_info['latitude']
+            if ('href' in feed_info and feed_info['href'] != None):
+                item["tags"]["href"] = feed_info['href']
+            del item['value']
+
+        return json_body_hypercat
+
+
+    def call_api_fetch(self, params, output_format='application/json', get_latest_only=True, time_field=TIMESERIES_TIME_FIELD, value_field=TIMESERIES_VALUE_FIELD):
         result = {}
 
         # Make request to CDP hub

@@ -4,21 +4,61 @@ import requests.packages.urllib3.exceptions
 import json
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
-
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+
 
 class Data_hub_call_osisoft_pi(Data_hub_call):
 
-    core_URL = "https://130.88.97.137/piwebapi"
-
-    host = core_URL.replace('https://', '').replace('http://', '').replace('/piwebapi', '')
+    CORE_URL = "https://130.88.97.137/piwebapi"
+    HOST = CORE_URL.replace('https://', '').replace('http://', '').replace('/piwebapi', '')
+    HUB_ID = 'Triangulum'
 
     def __init__(self, request_info):
-        self.request_info = request_info
+        super(Data_hub_call_osisoft_pi, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
+
+    class Factory:
+        def create(self, request): return Data_hub_call_osisoft_pi(request)
+
+    def get_influx_db_import_json(self, response, stream_name, feed_info):
+        json_body_pi = json.loads(response)
+
+        # Reformat JSON to be input into influx db.
+        for item in json_body_pi['Items']:
+            item['measurement'] = stream_name
+            item['fields'] = {}
+            if(self.is_int(item['Value'])):
+                item['fields']['value'] = int(item['Value'])
+            elif(self.is_float(item['Value'])):
+                item['fields']['value'] = float(item['Value'])
+            elif(self.is_dict(item['Value'])):
+                item['fields']['value'] = int(item['Value']['Value'])
+            else:
+                item['fields']['value'] = item['Value']
+            item['time'] = item['Timestamp']
+            if ('tagNames' in feed_info and len(feed_info['tagNames']) > 0):
+                item['fields']['tagNames'] = feed_info['tagNames']
+            item["tags"] = {}
+            if ('unitText' in feed_info and len(feed_info['unitText'].strip()) > 0):
+                item["tags"]["unitText"] = feed_info['unitText'].strip()
+            if ('longitude' in feed_info and feed_info['longitude'] != None):
+                item["tags"]["longitude"] = feed_info['longitude']
+            if ('latitude' in feed_info and feed_info['latitude'] != None):
+                item["tags"]["latitude"] = feed_info['latitude']
+            if ('href' in feed_info and feed_info['href'] != None):
+                item["tags"]["href"] = feed_info['href']
+            del item['Value']
+            del item['Good']
+            del item['Questionable']
+            del item['Substituted']
+            del item['Timestamp']
+            del item['UnitsAbbreviation']
+        json_body_hypercat = json_body_pi['Items']
+
+        return json_body_hypercat
 
 
-    def call_api_fetch(self, get_latest_only=True):
+    def call_api_fetch(self, params, get_latest_only=True):
         """
         GET https: // myserver / piwebapi / assetdatabases / D0NxzXSxtlKkGzAhZfHOB - KAQLhZ5wrU - UyRDQnzB_zGVAUEhMQUZTMDRcTlVHUkVFTg HTTP / 1.1
         Host: myserver

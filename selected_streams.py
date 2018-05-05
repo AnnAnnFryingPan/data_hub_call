@@ -18,6 +18,15 @@ class Selected_streams(object):
         self.cdp_requests_filename = 'list_cdp_requests.csv'
         self.cdp_credentials_filename = 'cdp_credentials.csv'
 
+        RESTFUL_BT_SOURCES_DIR = "restful_bt_sources"
+        BT_HUB_CREDENTIALS_FILE = 'bt_hub_credentials.csv'
+        RESTFUL_BT_REQUESTS_FILE = 'list_restful_bt_requests.csv'
+        CDP_SOURCES_DIR = "cdp_sources"
+        CDP_CREDENTIALS_FILE = 'cdp_credentials.csv'
+        CDP_REQUESTS_FILE = 'list_cdp_requests.csv'
+        TRIANGULUM_SOURCES_DIR = 'osisoft_pi_sources'
+        TRIANGULUM_REQUESTS_FILE = 'list_osisoft-pi_requests.csv'
+
         # Check folders are present and create if not.
         file_name_bt = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
         file_name_tri = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir,

@@ -24,6 +24,8 @@ class Hypercat_call(object):
                                     params=payload,
                                     timeout=20.000,
                                     json= json_content)
+            else:
+                raise Exception
         except Exception as err:
             result['ok'] = False
             result['content'] = err

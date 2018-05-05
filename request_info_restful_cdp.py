@@ -14,8 +14,6 @@ class Request_info_restful_cdp(Request_info):
     def get_element_types():
         return [(e.value, e.name) for e in Element_type]
 
-
-
     """Attributes:
         api_core_url: The url of the data hub. eg 'http://api.bt-hypercat.com'
         feed_id: The id of the parent feed to which the datastream belongs
@@ -23,9 +21,13 @@ class Request_info_restful_cdp(Request_info):
         feed_type: either 'sensors', 'events', 'locations' or 'geo'
     """
 
+    HUB_ID = 'CDP'
+    HUB_CALL_CLASSNAME = 'Data_hub_call_restful_cdp'
+
     def __init__(self, api_key, api_core_url, request_type, sub_cat_name, stream_id,
                  users_feed_name, feed_info):
-        super(Request_info_restful_cdp, self).__init__(api_core_url, users_feed_name, feed_info)
+        super(Request_info_restful_cdp, self).__init__(api_core_url, users_feed_name, feed_info,
+                                                       self.HUB_ID, self.HUB_CALL_CLASSNAME)
 
         self.api_key = api_key                  # https://api.cityverve.org.uk/v1
         self.request_type = request_type        # entity

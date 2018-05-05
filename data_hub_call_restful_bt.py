@@ -4,13 +4,67 @@ import json
 
 class Data_hub_call_restful_bt(Data_hub_call):
 
-    core_URL = "http://api.bt-hypercat.com"
+    CORE_URL = "http://api.bt-hypercat.com"
+    HUB_ID = 'BT-Hub'
 
-    def __init__(self, request_info): #, username, api_key):
+    def __init__(self, request_info):
         """Return a BT data hub connection object which will
             be used to connect to [stream] using [credentials]
          """
-        self.request_info = request_info
+        super(Data_hub_call_restful_bt, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
+
+    class Factory:
+        def create(self, request): return Data_hub_call_restful_bt(request)
+
+    def get_influx_db_import_json(self, response, stream_name, feed_info):
+        """
+        :param hypercat_response: [
+              {
+                "time": "Tue, 30 May 2017 15:30:04 GMT",
+                "value": "556"
+              },
+              {
+                "time": "Tue, 30 May 2017 15:15:05 GMT",
+                "value": "526"
+              },
+              {
+                "time": "Tue, 30 May 2017 15:00:04 GMT",
+                "value": "507"
+              },
+              ...
+        ]
+        :param stream_name:
+            eg: 'Manchester_carpark_spinningfields'
+        """
+
+        json_body_hypercat = json.loads(response)
+
+        # Reformat JSON to be input into influx db.
+        for item in json_body_hypercat:
+            item['measurement'] = stream_name
+            item['fields'] = {}
+            if self.is_int(item['value']):
+                item['fields']['value'] = int(item['value'])
+            elif self.is_float(item['value']):
+                item['fields']['value'] = float(item['value'])
+            else:
+                item['fields']['value'] = item['value']
+
+            if'tagNames' in feed_info and len(feed_info['tagNames']) > 0:
+                item['fields']['tagNames'] = feed_info['tagNames']
+            item["tags"] = {}
+            if('unitText' in feed_info and len(feed_info['unitText'].strip()) > 0):
+                item["tags"]["unitText"] = feed_info['unitText'].strip()
+            if 'longitude' in feed_info and feed_info['longitude'] != None:
+                item["tags"]["longitude"] = feed_info['longitude']
+            if 'latitude' in feed_info and feed_info['latitude'] != None:
+                item["tags"]["latitude"] = feed_info['latitude']
+            if 'href' in feed_info and feed_info['href'] != None:
+                item["tags"]["href"] = feed_info['href']
+            del item['value']
+
+        return json_body_hypercat
+
 
 
     def call_api_fetch(self, params, output_format='application/json', get_latest_only=True):

@@ -35,10 +35,14 @@ class Request_info_restful_bt(Request_info):
         feed_type: either 'sensors', 'events', 'locations' or 'geo'
     """
 
+    HUB_ID = 'BT'
+    HUB_CALL_CLASSNAME = 'Data_hub_call_restful_bt'
+
     def __init__(self, api_key, username, api_core_url, feed_type, feed_id, datastream_id,
                  request_type, users_feed_name, feed_info):
 
-        super(Request_info_restful_bt, self).__init__(api_core_url, users_feed_name, feed_info)
+        super(Request_info_restful_bt, self).__init__(api_core_url, users_feed_name, feed_info,
+                                                      self.HUB_ID, self.HUB_CALL_CLASSNAME)
 
         self.api_key = api_key
         self.username = username
