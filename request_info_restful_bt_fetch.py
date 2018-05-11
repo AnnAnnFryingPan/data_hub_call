@@ -47,7 +47,7 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
         request_type_ds_or_features = Request_type_ds_or_features[params['stream_params'][3]]
         datastream_id = int(params['stream_params'][4])
         request_type = Request_type[params['stream_params'][5]]
-        params_list_str = literal_eval(params['stream_params'][6].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
+        params_list = literal_eval(params['stream_params'][6].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
 
 
         try:
@@ -71,7 +71,7 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
                                                                 users_feed_name,
                                                                 feed_info)
             self.request_type_ds_or_feature = request_type_ds_or_features
-            self.params = params_list_str
+            self.params = params_list
         except:
             raise ValueError("Error creating new request (BT Hub): " + json.dumps(params))
 

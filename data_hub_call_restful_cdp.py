@@ -71,7 +71,8 @@ class Data_hub_call_restful_cdp(Data_hub_call):
         return json_body_hypercat
 
 
-    def call_api_fetch(self, params, output_format='application/json', get_latest_only=True, time_field=TIMESERIES_TIME_FIELD, value_field=TIMESERIES_VALUE_FIELD):
+    def call_api_fetch(self, params, output_format='application/json', get_latest_only=True,
+                       time_field=TIMESERIES_TIME_FIELD, value_field=TIMESERIES_VALUE_FIELD):
         result = {}
 
         # Make request to CDP hub
@@ -79,8 +80,8 @@ class Data_hub_call_restful_cdp(Data_hub_call):
 
         try:
             hub_result = self.get_request(url_string, params, output_format, get_latest_only)
-        except:
-            raise ConnectionError("Error connecting to CDP-hub - check internet connection.")
+        except Exception as err:
+            raise ConnectionError("Error connecting to CDP-hub - check internet connection. " + str(err))
         if hub_result.ok == False:
             raise ConnectionRefusedError("Connection to CDP-Hub refused: " + hub_result.reason)
 
@@ -156,7 +157,7 @@ class Data_hub_call_restful_cdp(Data_hub_call):
         headers_list = {    "Authorization": self.request_info.api_key,
                             "Accept": output_format}
 
-        if (get_latest_only and self.request_info.last_fetch_time != None):
+        if get_latest_only and self.request_info.last_fetch_time != None:
             # Start date needs to be in format: 2015-05-07T12:52:00Z
             params['start'] = self.request_info.last_fetch_time.strftime('%Y-%m-%dT%H:%M:%SZ')
         else:

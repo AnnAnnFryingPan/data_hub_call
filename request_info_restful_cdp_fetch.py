@@ -52,9 +52,9 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
         stream_id = list_params[3]
 
         try:
-            params_list_str = literal_eval(list_params[4].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
+            params_list = literal_eval(list_params[4].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
         except:
-            params_list_str = '{}'
+            params_list = {}
 
         try:
             users_feed_name = list_params[5].rstrip('\n')
@@ -75,7 +75,7 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
                                                                 stream_id,
                                                                 users_feed_name,
                                                                 feed_info)
-            self.params = params_list_str
+            self.params = params_list
         except:
             # raise;
             raise Exception("Error creating new request (cdp): " + params)
@@ -93,9 +93,9 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
         stream_id = list_params[3]
 
         try:
-            params_list_str = literal_eval(list_params[4].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
+            params_list = literal_eval(list_params[4].rstrip('\n'))  # {'limit': '100'} '{\\'limit\\':\\'100\\'}'
         except:
-            params_list_str = '{}'
+            params_list = {}
 
         try:
             users_feed_name = params['user_defined_name'].rstrip('\n')
@@ -115,7 +115,7 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
                                                                 stream_id,
                                                                 users_feed_name,
                                                                 feed_info)
-            self.params = params_list_str  # API's allowed param list eg 'offset=12&limit=10'
+            self.params = params_list  # API's allowed param list eg 'offset=12&limit=10'
         except:
             raise Exception("Error creating new request (CDP): " + json.dumps(params))
 
