@@ -1,12 +1,18 @@
 import os
-from data_hub_call_restful_bt import  Data_hub_call_restful_bt
+from data_hub_call_restful_bt import Data_hub_call_restful_bt
 from data_hub_call_osisoft_pi import Data_hub_call_osisoft_pi
 from data_hub_call_restful_cdp import Data_hub_call_restful_cdp
 from request_info_fetch_list import Request_info_fetch_list, Data_request_type
 import json
 
 
+
+
 class Selected_streams(object):
+    CORE_API_BT = Data_hub_call_restful_bt.CORE_URL
+    CORE_API_CDP = Data_hub_call_restful_cdp.CORE_URL
+    CORE_API_TRIANGULUM = Data_hub_call_osisoft_pi.CORE_URL
+
     def __init__(self, data_sources_path):
         self.data_source_dir = data_sources_path
         self.restful_bt_sources_dir = 'restful_bt_sources'
@@ -18,14 +24,7 @@ class Selected_streams(object):
         self.cdp_requests_filename = 'list_cdp_requests.csv'
         self.cdp_credentials_filename = 'cdp_credentials.csv'
 
-        RESTFUL_BT_SOURCES_DIR = "restful_bt_sources"
-        BT_HUB_CREDENTIALS_FILE = 'bt_hub_credentials.csv'
-        RESTFUL_BT_REQUESTS_FILE = 'list_restful_bt_requests.csv'
-        CDP_SOURCES_DIR = "cdp_sources"
-        CDP_CREDENTIALS_FILE = 'cdp_credentials.csv'
-        CDP_REQUESTS_FILE = 'list_cdp_requests.csv'
-        TRIANGULUM_SOURCES_DIR = 'osisoft_pi_sources'
-        TRIANGULUM_REQUESTS_FILE = 'list_osisoft-pi_requests.csv'
+
 
         # Check folders are present and create if not.
         file_name_bt = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
@@ -47,7 +46,7 @@ class Selected_streams(object):
     def write_credentials(self, hub, credential):
         # 8a0b0d8c-bf4e-44d5-b34d-a2d5f139918a,AnnGledson
 
-        if (hub.api_core_url == "http://api.bt-hypercat.com"):
+        if hub.api_core_url == Data_hub_call_restful_bt.CORE_URL:
             # 1. BT Hub
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_credentials_filename)
             cred_csv_line = credential['api_key'] + ',' + credential['username']
@@ -62,11 +61,11 @@ class Selected_streams(object):
             except Exception as err:
                 raise IOError('Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
 
-        #elif (hub.api_core_url == "https://130.88.97.137/piwebapi"):
+        #elif hub.api_core_url == Data_hub_call_osisoft_pi.CORE_URL:
             # 2. Triangulum
             # Triangulum doesn't require credentials to access streams
             #file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_credentials_filename)
-        elif (hub.api_core_url == "https://api.cityverve.org.uk/v1/"):
+        elif hub.api_core_url == Data_hub_call_restful_cdp.CORE_URL:
             # 3. CDP
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_credentials_filename)
             cred_csv_line = credential['api_key'] + ',' + credential['username']
@@ -193,11 +192,11 @@ class Selected_streams(object):
         hub_url = stream_params['stream_params'][0]
         stream_href = stream_params['feed_info']['href']
 
-        if (hub_url == Data_hub_call_restful_bt.core_URL):  # "http://api.bt-hypercat.com"):
+        if (hub_url == Data_hub_call_restful_bt.CORE_URL):  # "http://api.bt-hypercat.com"):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
-        elif (hub_url == Data_hub_call_osisoft_pi.core_URL):  # "https://130.88.97.137/piwebapi"):
+        elif (hub_url == Data_hub_call_osisoft_pi.CORE_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
-        elif (hub_url == Data_hub_call_restful_cdp.core_URL):
+        elif (hub_url == Data_hub_call_restful_cdp.CORE_URL):
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
             raise NameError('Unrecognised hub url: ' + hub_url)
