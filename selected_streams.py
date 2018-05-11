@@ -225,11 +225,11 @@ class Selected_streams(object):
         hub_url = new_stream_params['stream_params'][0]
         stream_href = new_stream_params['feed_info']['href']
 
-        if (hub_url == Data_hub_call_restful_bt.core_URL):  # "http://api.bt-hypercat.com"):
+        if (hub_url == Data_hub_call_restful_bt.CORE_URL):  # "http://api.bt-hypercat.com"):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
-        elif (hub_url == Data_hub_call_osisoft_pi.core_URL):  # "https://130.88.97.137/piwebapi"):
+        elif (hub_url == Data_hub_call_osisoft_pi.CORE_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
-        elif (hub_url == Data_hub_call_restful_cdp.core_URL):
+        elif (hub_url == Data_hub_call_restful_cdp.CORE_URL):
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
             raise NameError('Unrecognised hub url: ' + hub_url)
