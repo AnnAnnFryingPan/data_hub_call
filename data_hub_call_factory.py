@@ -7,8 +7,8 @@ from data_hub_call_restful_bt import Data_hub_call_restful_bt
 class Data_hub_call_factory:
     factories = {}
 
-    def add_factory(id, data_hub_call_Factory):
-        Data_hub_call_factory.factories.put[id] = data_hub_call_Factory
+    def add_factory(id, data_hub_call_factory):
+        Data_hub_call_factory.factories.put[id] = data_hub_call_factory
     add_factory = staticmethod(add_factory)
 
     # A Template Method:

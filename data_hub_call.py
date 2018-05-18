@@ -1,4 +1,3 @@
-from __future__ import generators
 import datetime
 import re
 from dateutil.parser import parse
