@@ -30,7 +30,7 @@ class Request_info_fetch_list(Request_info_list):
 
     def append_request(self, request_params, api_key=None, username=None):
         try:
-            hub_api = json.loads(request_params)['stream_params'][0]
+            hub_api = request_params['stream_params'][0]
         except:
             hub_api = request_params.split(',')[0]
 

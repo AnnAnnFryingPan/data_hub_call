@@ -87,7 +87,7 @@ class Selected_streams(object):
     def get_streams_from_file(self):
         # Read from selected streams files
         self.api_streams.clear_all()
-        api_streams_csv_list = []
+        api_streams_json = None
 
 
         # Get the BT credentials from the BT folder
@@ -103,40 +103,40 @@ class Selected_streams(object):
                 'Unable to read BT credentials file ' + self.bt_credentials_filename + ' file in '
                 + self.restful_bt_sources_dir + '. ' + str(err))
         else:
-            # Get the streams as CSV from the BT file
+            # Get the streams as JSON from the BT file
             try:
                 with open(os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)) \
                         as f_requests:
-                    api_streams_csv_list.extend(f_requests.readlines())
+                    api_streams_json = json.load(f_requests)['stream_requests']
             except Exception as err:
                 print(
                     'Unable to read BT streams file ' + self.bt_requests_filename + ' file in '
                     + self.restful_bt_sources_dir + '. ' + str(err))
 
-        for stream_params_str in api_streams_csv_list:
+        for stream_params in api_streams_json:
             try:
-                self.api_streams.append_request(stream_params_str, api_key, username)
+                self.api_streams.append_request(stream_params, api_key, username)
             except Exception as err:
-                print('Unable to poll BT stream: ' + stream_params_str + '... ' + str(err))
-        api_streams_csv_list.clear()
+                print('Unable to poll BT stream: ' + json.dumps(stream_params) + '... ' + str(err))
+        api_streams_json = {}
 
         # Get the streams as CSV from the Triangulum file
         try:
             with open(os.path.join(
                     self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)) \
                     as f_requests:
-                api_streams_csv_list.extend(f_requests.readlines())
+                api_streams_json = json.load(f_requests)['stream_requests']
         except Exception as err:
             print('Unable to read Triangulum streams file ' + self.triangulum_requests_filename + ' file in '
                   + self.restful_triangulum_sources_dir + '. ' + str(err))
 
-        for stream_params_str in api_streams_csv_list:
+        for stream_params in api_streams_json:
             try:
-                self.api_streams.append_request(stream_params_str)
+                self.api_streams.append_request(stream_params)
             except Exception as err:
-                print('Unable to poll Triangulum stream: ' + stream_params_str + '... ' + str(err))
+                print('Unable to poll Triangulum stream: ' + json.dumps(stream_params) + '... ' + str(err))
 
-        api_streams_csv_list.clear()
+        api_streams_json = {}
 
         try:
             with open(os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_credentials_filename), \
@@ -151,15 +151,15 @@ class Selected_streams(object):
             try:
                 with open(os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)) \
                         as f_requests:
-                    api_streams_csv_list.extend(f_requests.readlines())
+                    api_streams_json = json.load(f_requests)['stream_requests']
             except Exception as err:
                 print('Unable to read CDP streams file ' + self.cdp_requests_filename + ' file in '
                     + self.cdp_sources_dir + '. ' + str(err))
 
 
-        for stream_params_str in api_streams_csv_list:
+        for stream_params in api_streams_json:
             try:
-                self.api_streams.append_request(stream_params_str, api_key)
+                self.api_streams.append_request(stream_params, api_key)
             except Exception as err:
                 print('Unable to poll CDP stream: ' + stream_params_str + '... ' + str(err))
 
@@ -167,12 +167,6 @@ class Selected_streams(object):
     def clear_all_streams(self):
         self.api_streams.clear_all()
         new_file = []
-
-        # Empty the request files
-        #if os.path.exists(os.path.dirname(os.path.join(self.data_source_dir, self.restful_bt_sources_dir))):
-        #    with open(os.path.join(self.data_source_dir, self.restful_bt_sources_dir,
-        #                           self.bt_credentials_filename), "w+") as f_out:
-        #        f_out.writelines(new_file)
 
         if os.path.exists(os.path.dirname(os.path.join(self.data_source_dir, self.restful_bt_sources_dir))):
             with open(os.path.join(self.data_source_dir, self.restful_bt_sources_dir,
@@ -205,14 +199,23 @@ class Selected_streams(object):
             os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
         try:
-            with open(file_name, "r+") as fp:
+
+            with open(file_name)  as f_requests:
+                api_streams_json = json.load(f_requests)['stream_requests']
+                for api_stream in api_streams_json:
+                    if api_stream['feed_info']['href'] == stream_href:
+                        del api_streams
+                json.dump(api_streams_json, f_requests)
+
+
+            """with open(file_name, "r+") as fp:
                 temp = fp.readlines()
                 fp.seek(0)
                 for line in temp:
                     if line.strip() != stream_href:
                         fp.write(line)
                 fp.truncate()
-                fp.close()
+                fp.close()"""
         except Exception as err:
             raise IOError('Unable to read streams file: ' + file_name + '. ' + str(err))
 
@@ -238,18 +241,27 @@ class Selected_streams(object):
             os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
         try:
-            if os.path.exists(file_name):
+            """if os.path.exists(file_name):
                 append_write = 'r+'  # append if already exists
             else:
-                append_write = 'w+'  # make a new file if not
+                append_write = 'w+'  # make a new file if not"""
 
-            with open(file_name, append_write) as fp:
+            with open(file_name)  as f_requests:
+                api_streams_json = json.load(f_requests)['stream_requests']
+                for api_stream in api_streams_json:
+                    if api_stream['feed_info']['href'] == stream_href:
+                        break
+                else:
+                    api_streams_json.append(new_stream_params)
+                json.dump(api_streams_json, f_requests)
+
+            """with open(file_name, append_write) as fp:
                 for line in fp:
                     if stream_href in line:
                         break
                 else:  # not found, we are at the eof
                     fp.write(str_stream_params+'\n')  # append missing data
-                fp.close()
+                fp.close()"""
         except Exception as err:
             raise IOError('Unable to read streams file: ' + file_name + '. ' + str(err))
 
