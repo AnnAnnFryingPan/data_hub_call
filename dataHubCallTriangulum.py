@@ -1,4 +1,4 @@
-from data_hub_call import Data_hub_call
+from dataHubCall import DataHubCall
 import requests
 import requests.packages.urllib3.exceptions
 import json
@@ -8,17 +8,17 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 
-class Data_hub_call_osisoft_pi(Data_hub_call):
+class DataHubCallTriangulum(DataHubCall):
 
     CORE_URL = "https://130.88.97.137/piwebapi"
     HOST = CORE_URL.replace('https://', '').replace('http://', '').replace('/piwebapi', '')
     HUB_ID = 'Triangulum'
 
     def __init__(self, request_info):
-        super(Data_hub_call_osisoft_pi, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
+        super(DataHubCallTriangulum, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
 
     class Factory:
-        def create(self, request): return Data_hub_call_osisoft_pi(request)
+        def create(self, request): return DataHubCallTriangulum(request)
 
     def get_influx_db_import_json(self, response, stream_name, feed_info):
         json_body_pi = json.loads(response)

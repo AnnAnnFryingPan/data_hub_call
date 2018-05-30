@@ -1,4 +1,4 @@
-from request_info_restful_bt import Request_info_restful_bt, Feed_type, Request_type
+from requestInfoBTHub import RequestInfoBTHub, Feed_type, Request_type
 from enum import Enum
 import json
 from ast import literal_eval
@@ -9,7 +9,7 @@ class Request_type_ds_or_features(Enum):
     features = 2
 
 
-class Request_info_restful_bt_fetch(Request_info_restful_bt):
+class RequestInfoBTHubFetch(RequestInfoBTHub):
     """A data stream from the BT Data Hub
 
     Attributes:
@@ -37,6 +37,10 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
                 except Exception as err:
                     raise err
 
+    class Factory:
+        def create(self, username, api_key, params):
+            return RequestInfoBTHubFetch(username, api_key, params)
+
 
 
     def init_json(self, username, api_key, params):
@@ -61,7 +65,7 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             feed_info = {}
 
         try:
-            super(Request_info_restful_bt_fetch, self).__init__(api_key,
+            super(RequestInfoBTHubFetch, self).__init__(        api_key,
                                                                 username,
                                                                 core_url,
                                                                 feed_type,
@@ -102,7 +106,7 @@ class Request_info_restful_bt_fetch(Request_info_restful_bt):
             feed_info = {}
 
         try:
-            super(Request_info_restful_bt_fetch, self).__init__(api_key, username,
+            super(RequestInfoBTHubFetch, self).__init__(api_key, username,
                                                                 core_url_string,
                                                                 feed_type,
                                                                 feed_id,

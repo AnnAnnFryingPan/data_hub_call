@@ -1,4 +1,4 @@
-from request_info import Request_info
+from requestInfo import RequestInfo
 from enum import Enum
 
 class Element_type(Enum):
@@ -6,7 +6,7 @@ class Element_type(Enum):
     none = 0
     entity = 1
 
-class Request_info_restful_cdp(Request_info):
+class RequestInfoCityVervePoP(RequestInfo):
     """A data stream from any restful CDP style platform/hub:
     """
 
@@ -22,11 +22,11 @@ class Request_info_restful_cdp(Request_info):
     """
 
     HUB_ID = 'CDP'
-    HUB_CALL_CLASSNAME = 'Data_hub_call_restful_cdp'
+    HUB_CALL_CLASSNAME = 'DataHubCallCityVervePoP'
 
     def __init__(self, api_key, api_core_url, request_type, sub_cat_name, stream_id,
                  users_feed_name, feed_info):
-        super(Request_info_restful_cdp, self).__init__(api_core_url, users_feed_name, feed_info,
+        super(RequestInfoCityVervePoP, self).__init__(api_core_url, users_feed_name, feed_info,
                                                        self.HUB_ID, self.HUB_CALL_CLASSNAME)
 
         self.api_key = api_key                  # https://api.cityverve.org.uk/v1

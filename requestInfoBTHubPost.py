@@ -1,7 +1,7 @@
-from request_info_restful_bt import Request_info_restful_bt, Feed_type, Request_type
+from requestInfoBTHub import RequestInfoBTHub, Feed_type, Request_type
 
 
-class Request_info_restful_bt_post(Request_info_restful_bt):
+class RequestInfoBTHubPost(RequestInfoBTHub):
     """A data stream from the restufl BT Data Hub style
 
     Attributes:
@@ -13,7 +13,7 @@ class Request_info_restful_bt_post(Request_info_restful_bt):
 
     def __init__(self, api_key, username, api_core_url, feed_type, feed_id, datastream_id,
                  request_type, users_feed_name):
-        super(Request_info_restful_bt_post, self).__init__(api_key,
+        super(RequestInfoBTHubPost, self).__init__(     api_key,
                                                         username,
                                                         api_core_url,
                                                         feed_type,

@@ -1,15 +1,15 @@
 import os
-from data_hub_call_restful_bt import Data_hub_call_restful_bt
-from data_hub_call_osisoft_pi import Data_hub_call_osisoft_pi
-from data_hub_call_restful_cdp import Data_hub_call_restful_cdp
-from request_info_fetch_list import Request_info_fetch_list, Data_request_type
+from dataHubCallTriangulum import DataHubCallTriangulum
+from dataHubCallCityVervePoP import DataHubCallCityVervePoP
+from dataHubCallBTHub import DataHubCallBTHub
+from requestInfoFetchList import RequestInfoFetchList
 import json
 
 
-class Selected_streams(object):
-    CORE_API_BT = Data_hub_call_restful_bt.CORE_URL
-    CORE_API_CDP = Data_hub_call_restful_cdp.CORE_URL
-    CORE_API_TRIANGULUM = Data_hub_call_osisoft_pi.CORE_URL
+class SelectedStreams(object):
+    CORE_API_BT = DataHubCallBTHub.CORE_URL
+    CORE_API_CDP = DataHubCallCityVervePoP.CORE_URL
+    CORE_API_TRIANGULUM = DataHubCallTriangulum.CORE_URL
 
     def __init__(self, data_sources_path):
         self.data_source_dir = data_sources_path
@@ -36,14 +36,14 @@ class Selected_streams(object):
             os.makedirs(os.path.dirname(file_name_cdp), exist_ok=True)
 
         try:
-            self.api_streams = Request_info_fetch_list()
+            self.api_streams = RequestInfoFetchList()
         except Exception as err:
             raise err
 
     def write_credentials(self, hub, credential):
         # 8a0b0d8c-bf4e-44d5-b34d-a2d5f139918a,AnnGledson
 
-        if hub.api_core_url == Data_hub_call_restful_bt.CORE_URL:
+        if hub.api_core_url == DataHubCallBTHub.CORE_URL:
             # 1. BT Hub
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_credentials_filename)
             cred_csv_line = credential['api_key'] + ',' + credential['username']
@@ -58,11 +58,11 @@ class Selected_streams(object):
             except Exception as err:
                 raise IOError('Unable to open or write to credentials file: ' + file_name + '. ' + str(err))
 
-        #elif hub.api_core_url == Data_hub_call_osisoft_pi.CORE_URL:
+        #elif hub.api_core_url == DataHubCallTriangulum.CORE_URL:
             # 2. Triangulum
             # Triangulum doesn't require credentials to access streams
             #file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_credentials_filename)
-        elif hub.api_core_url == Data_hub_call_restful_cdp.CORE_URL:
+        elif hub.api_core_url == DataHubCallCityVervePoP.CORE_URL:
             # 3. CDP
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_credentials_filename)
             cred_csv_line = credential['api_key'] + ',' + credential['username']
@@ -112,7 +112,7 @@ class Selected_streams(object):
 
         for stream_params in api_streams_json:
             try:
-                self.api_streams.append_request(stream_params, api_key, username)
+                self.api_streams.append_request('BT-Hub', stream_params, api_key, username)
             except Exception as err:
                 print('Unable to poll BT stream: ' + json.dumps(stream_params) + '... ' + str(err))
         api_streams_json = {}
@@ -129,7 +129,7 @@ class Selected_streams(object):
 
         for stream_params in api_streams_json:
             try:
-                self.api_streams.append_request(stream_params)
+                self.api_streams.append_request('Triangulum', stream_params)
             except Exception as err:
                 print('Unable to poll Triangulum stream: ' + json.dumps(stream_params) + '... ' + str(err))
 
@@ -156,7 +156,7 @@ class Selected_streams(object):
 
         for stream_params in api_streams_json:
             try:
-                self.api_streams.append_request(stream_params, api_key)
+                self.api_streams.append_request('CityVervePoP', stream_params, api_key)
             except Exception as err:
                 print('Unable to poll CDP stream: ' + stream_params_str + '... ' + str(err))
 
@@ -183,11 +183,11 @@ class Selected_streams(object):
         hub_url = stream_params['stream_params'][0]
         stream_href = stream_params['feed_info']['href']
 
-        if (hub_url == Data_hub_call_restful_bt.CORE_URL):  # "http://api.bt-hypercat.com"):
+        if (hub_url == DataHubCallBTHub.CORE_URL):  # "http://api.bt-hypercat.com"):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
-        elif (hub_url == Data_hub_call_osisoft_pi.CORE_URL):  # "https://130.88.97.137/piwebapi"):
+        elif (hub_url == DataHubCallTriangulum.CORE_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
-        elif (hub_url == Data_hub_call_restful_cdp.CORE_URL):
+        elif (hub_url == DataHubCallCityVervePoP.CORE_URL):
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
             raise NameError('Unrecognised hub url: ' + hub_url)
@@ -217,11 +217,11 @@ class Selected_streams(object):
         hub_url = new_stream_params['stream_params'][0]
         stream_href = new_stream_params['feed_info']['href']
 
-        if (hub_url == Data_hub_call_restful_bt.CORE_URL):  # "http://api.bt-hypercat.com"):
+        if (hub_url == DataHubCallBTHub.CORE_URL):  # "http://api.bt-hypercat.com"):
             file_name = os.path.join(self.data_source_dir, self.restful_bt_sources_dir, self.bt_requests_filename)
-        elif (hub_url == Data_hub_call_osisoft_pi.CORE_URL):  # "https://130.88.97.137/piwebapi"):
+        elif (hub_url == DataHubCallTriangulum.CORE_URL):  # "https://130.88.97.137/piwebapi"):
             file_name = os.path.join(self.data_source_dir, self.restful_triangulum_sources_dir, self.triangulum_requests_filename)
-        elif (hub_url == Data_hub_call_restful_cdp.CORE_URL):
+        elif (hub_url == DataHubCallCityVervePoP.CORE_URL):
             file_name = os.path.join(self.data_source_dir, self.cdp_sources_dir, self.cdp_requests_filename)
         else:
             raise NameError('Unrecognised hub url: ' + hub_url)

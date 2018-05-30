@@ -1,4 +1,4 @@
-from data_hub_call import Data_hub_call
+from dataHubCall import DataHubCall
 import requests
 import json
 
@@ -6,19 +6,19 @@ TIMESERIES_TIME_FIELD = ["latest","to"]
 TIMESERIES_VALUE_FIELD = ["latest","value"]
 
 
-class Data_hub_call_restful_cdp(Data_hub_call):
+class DataHubCallCityVervePoP(DataHubCall):
 
     CORE_URL = "https://api.cityverve.org.uk/v1"
-    HUB_ID = 'CDP'
+    HUB_ID = 'CityVervePoP'
 
     def __init__(self, request_info): #, username, api_key):
         """Return a CDP connection object which will
             be used to connect to [stream] using [credentials]
          """
-        super(Data_hub_call_restful_cdp, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
+        super(DataHubCallCityVervePoP, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
 
     class Factory:
-        def create(self, request): return Data_hub_call_restful_cdp(request)
+        def create(self, request): return DataHubCallCityVervePoP(request)
 
     def get_influx_db_import_json(self, response, stream_name, feed_info):
         """

@@ -1,4 +1,4 @@
-from request_info_restful_cdp import Request_info_restful_cdp, Element_type
+from requestInfoCityVervePoP import RequestInfoCityVervePoP, Element_type
 from enum import Enum
 import json
 from ast import literal_eval
@@ -18,7 +18,7 @@ class Request_type(Enum):
     cat = 2
 
 
-class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
+class RequestInfoCityVervePoPFetch(RequestInfoCityVervePoP):
     """A data stream from the BT Data Hub
 
     """
@@ -39,6 +39,10 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
                     self.init_csv(api_key, params)
                 except Exception as err:
                     raise err
+
+    class Factory:
+        def create(self, username, api_key, params):
+            return RequestInfoCityVervePoPFetch(api_key, params)
 
 
     def init_csv(self, api_key, params):
@@ -68,7 +72,7 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
             feed_info = {}
 
         try:
-            super(Request_info_restful_cdp_fetch, self).__init__(api_key,
+            super(RequestInfoCityVervePoPFetch, self).__init__(api_key,
                                                                 core_url_string,
                                                                 request_type,
                                                                 sub_cat_name,
@@ -108,7 +112,7 @@ class Request_info_restful_cdp_fetch(Request_info_restful_cdp):
             feed_info = {}
 
         try:
-            super(Request_info_restful_cdp_fetch, self).__init__(api_key,
+            super(RequestInfoCityVervePoPFetch, self).__init__(api_key,
                                                                 core_url_string,
                                                                 request_type,
                                                                 sub_cat_name,

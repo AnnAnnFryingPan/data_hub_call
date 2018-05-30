@@ -1,7 +1,7 @@
 import requests
 import json
 
-class Hypercat_call(object):
+class HypercatCall(object):
     """A connection/call to the BT Hypercat search facility"""
 
     def call_hypercat_search(self, url, cat_url, json_content={}, request_type='get', headers_list={}):

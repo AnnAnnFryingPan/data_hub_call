@@ -1,7 +1,7 @@
-from request_info_osisoft_pi import Request_info_osisoft_pi, Feed_type_pi, Request_type_pi
+from requestInfoTriangulum import RequestInfoTriangulum, Feed_type_pi, Request_type_pi
 import json
 
-class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
+class RequestInfoTriangulumFetch(RequestInfoTriangulum):
     """A data stream from any hypercat platform/hub:
     """
 
@@ -18,6 +18,10 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
                     self.init_csv(params, metadata)
                 except Exception as err:
                     raise err
+
+    class Factory:
+        def create(self, username, api_key, params):
+            return RequestInfoTriangulumFetch(params)
 
 
 
@@ -49,7 +53,7 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
             feed_info = {}
 
         try:
-            super(Request_info_osisoft_pi_fetch, self).__init__(host,
+            super(RequestInfoTriangulumFetch, self).__init__(host,
                                                                 core_url_string,
                                                                 feed_type,
                                                                 stream_params,
@@ -85,7 +89,7 @@ class Request_info_osisoft_pi_fetch(Request_info_osisoft_pi):
             feed_info = {}
 
         try:
-            super(Request_info_osisoft_pi_fetch, self).__init__(host,
+            super(RequestInfoTriangulumFetch, self).__init__(host,
                                                                 core_url_string,
                                                                 feed_type,
                                                                 param_list,

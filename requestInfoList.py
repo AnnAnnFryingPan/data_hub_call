@@ -1,5 +1,5 @@
 
-class Request_info_list(object):
+class RequestInfoList(object):
     """A data stream from any platform/hub:
     """
 

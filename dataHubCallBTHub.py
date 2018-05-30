@@ -1,8 +1,8 @@
-from data_hub_call import Data_hub_call
+from dataHubCall import DataHubCall
 import requests
 import json
 
-class Data_hub_call_restful_bt(Data_hub_call):
+class DataHubCallBTHub(DataHubCall):
 
     CORE_URL = "http://api.bt-hypercat.com"
     HUB_ID = 'BT-Hub'
@@ -11,10 +11,10 @@ class Data_hub_call_restful_bt(Data_hub_call):
         """Return a BT data hub connection object which will
             be used to connect to [stream] using [credentials]
          """
-        super(Data_hub_call_restful_bt, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
+        super(DataHubCallBTHub, self).__init__(self.CORE_URL, request_info, self.HUB_ID)
 
     class Factory:
-        def create(self, request): return Data_hub_call_restful_bt(request)
+        def create(self, request): return DataHubCallBTHub(request)
 
     def get_influx_db_import_json(self, response, stream_name, feed_info):
         """

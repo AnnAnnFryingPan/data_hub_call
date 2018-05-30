@@ -5,7 +5,7 @@ from abc import ABCMeta, abstractmethod
 
 
 
-class Data_hub_call(object):
+class DataHubCall(object):
     """A data hub call:
     """
 

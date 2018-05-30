@@ -1,4 +1,4 @@
-from request_info import Request_info
+from requestInfo import RequestInfo
 from enum import Enum
 
 
@@ -16,7 +16,7 @@ class Request_type(Enum):
     datapoints = 1
     events = 2
 
-class Request_info_restful_bt(Request_info):
+class RequestInfoBTHub(RequestInfo):
     """A data stream from any restful BT style platform/hub:
     """
 
@@ -36,12 +36,12 @@ class Request_info_restful_bt(Request_info):
     """
 
     HUB_ID = 'BT'
-    HUB_CALL_CLASSNAME = 'Data_hub_call_restful_bt'
+    HUB_CALL_CLASSNAME = 'DataHubCallBTHub'
 
     def __init__(self, api_key, username, api_core_url, feed_type, feed_id, datastream_id,
                  request_type, users_feed_name, feed_info):
 
-        super(Request_info_restful_bt, self).__init__(api_core_url, users_feed_name, feed_info,
+        super(RequestInfoBTHub, self).__init__(api_core_url, users_feed_name, feed_info,
                                                       self.HUB_ID, self.HUB_CALL_CLASSNAME)
 
         self.api_key = api_key
@@ -50,6 +50,7 @@ class Request_info_restful_bt(Request_info):
         self.feed_id = feed_id
         self.datastream_id = datastream_id
         self.request_type = request_type
+
 
 
 

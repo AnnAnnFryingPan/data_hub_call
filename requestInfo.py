@@ -1,4 +1,4 @@
-class Request_info(object):
+class RequestInfo(object):
     """A data stream from any platform/hub:
     """
 
