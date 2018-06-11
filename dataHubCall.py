@@ -18,6 +18,10 @@ class DataHubCall(object):
     def get_influx_db_import_json(self, response, stream_name, feed_info):
         pass
 
+    @abstractmethod
+    def json_result_to_csv(self, json_response):
+        pass
+
     def get_date_time(self, datetime_str):
         # "2017-10-11T11:26:05Z" (Triangulum/Pi recorded data style)
         # "2017-10-11T11:34:09.2461304Z" (Triangulum/Pi interpolated data style)

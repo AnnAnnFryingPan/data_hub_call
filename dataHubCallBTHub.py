@@ -66,6 +66,13 @@ class DataHubCallBTHub(DataHubCall):
         return json_body_hypercat
 
 
+    def json_result_to_csv(self, json_result):
+        result = ''
+        for datetime_value in json.loads(json_result):
+            result += datetime_value['time'] + ',' + datetime_value['value'] + '\n'
+        return result
+
+
 
     def call_api_fetch(self, params, output_format='application/json', get_latest_only=True):
         result = {}
@@ -115,10 +122,13 @@ class DataHubCallBTHub(DataHubCall):
                 except Exception as e:
                     result['ok'] = False
                     result['reason'] = 'Problem sorting results by date to get latest only. ' + str(e)
+
         result['content'] = json.dumps(json_result_content)
+
         result['available_matches'] = len(json_result_content)
         result['returned_matches'] = len(newlist)
         return result
+
 
     def call_api_post(self, eeml):
         # registered user name

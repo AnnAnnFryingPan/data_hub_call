@@ -131,3 +131,9 @@ class DataHubCallTriangulum(DataHubCall):
 
         return result
 
+    def json_result_to_csv(self, json_result):
+        result = ''
+        for datetime_value in json.loads(json_result)['Items']:
+            result += datetime_value['time'] + ',' + datetime_value['value'] + '\n'
+        return result
+

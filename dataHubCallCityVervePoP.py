@@ -331,3 +331,9 @@ class DataHubCallCityVervePoP(DataHubCall):
         # Make request to CDP hub
         hub_result = self.get_request(uri, params, output_format, get_latest_only)
         return json.loads(hub_result.content.decode("utf-8"))
+
+    def json_result_to_csv(self, json_result):
+        result = ''
+        for datetime_value in json.loads(json_result):
+            result += datetime_value['time'] + ',' + datetime_value['value'] + '\n'
+        return result
