@@ -66,6 +66,8 @@ class DataHubCallCityVervePoP(DataHubCall):
                 item["tags"]["latitude"] = feed_info['latitude']
             if ('href' in feed_info and feed_info['href'] != None):
                 item["tags"]["href"] = feed_info['href']
+            if ('type' in feed_info and feed_info['type'] != None):
+                item["tags"]["type"] = feed_info['type']
             del item['value']
 
         return json_body_hypercat
