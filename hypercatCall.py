@@ -101,9 +101,9 @@ class HypercatCall(object):
         if search_result.ok == True:
             try:
                 result['content'] = json.loads(search_result.content.decode("utf-8"))
-            except:
+            except Exception as err:
                 try:
-                    result['content'] = json.loads(json.dumps(search_result.json()))
+                    result['content'] = json.loads(json.dumps(search_result.json(), ensure_ascii=False))
                 except Exception as err:
                     result['ok'] = False
                     result['content'] = str(err)

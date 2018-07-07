@@ -24,7 +24,7 @@ class SelectedStreamsFromDBHubs(SelectedStreamsFiles):
     def get_previously_selected_streams(self, user, streams):
         result = []
         for dir_key in self.stream_directories:
-            result.extend(self.stream_directories[dir_key].get_previously_selected_streams(user, streams))
+            result.extend(self.stream_directories[dir_key].get_previously_selected_streams(user, streams)['streams'])
         return result
 
     def add_to_streams(self, stream_params):
