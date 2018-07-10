@@ -6,13 +6,13 @@ from ast import literal_eval
 #E.G.: https://api.cityverve.org.uk/v1/entity/noise-meter/6472W/timeseries/dose/datapoints
 
 class Stream_type(Enum):
-    __order__ = 'timeseries'
+    __order__ = 'none timeseries static'
     none = 0
     timeseries = 1
     static = 2
 
 class Request_type(Enum):
-    __order__ = 'entity cat'
+    __order__ = 'none entity cat'
     none = 0
     entity = 1
     cat = 2

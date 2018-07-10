@@ -2,7 +2,7 @@ from requestInfo import RequestInfo
 from enum import Enum
 
 class Element_type(Enum):
-    __order__ = 'entity'
+    __order__ = 'none entity'
     none = 0
     entity = 1
 
