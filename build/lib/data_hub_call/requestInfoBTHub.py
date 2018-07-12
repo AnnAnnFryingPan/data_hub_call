@@ -1,4 +1,4 @@
-from requestInfo import RequestInfo
+from data_hub_call.requestInfo import RequestInfo
 from enum import Enum
 
 

@@ -1,6 +1,6 @@
 import os
 import json
-from requestInfoFetchList import RequestInfoFetchList
+from data_hub_call.requestInfoFetchList import RequestInfoFetchList
 
 class SelectedStreamsDirectory(object):
     """A directory for storing selected stream and credentials info"""

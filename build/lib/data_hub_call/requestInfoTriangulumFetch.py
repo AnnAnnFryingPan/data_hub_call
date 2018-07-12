@@ -1,4 +1,4 @@
-from requestInfoTriangulum import RequestInfoTriangulum, Feed_type_pi, Request_type_pi
+from data_hub_call.requestInfoTriangulum import RequestInfoTriangulum, Feed_type_pi, Request_type_pi
 import json
 
 class RequestInfoTriangulumFetch(RequestInfoTriangulum):

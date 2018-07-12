@@ -1,8 +1,8 @@
 # Polymorphic factory methods.
 from __future__ import generators
-from dataHubCallTriangulum import DataHubCallTriangulum
-from dataHubCallCityVervePoP import DataHubCallCityVervePoP
-from dataHubCallBTHub import DataHubCallBTHub
+from data_hub_call.dataHubCallTriangulum import DataHubCallTriangulum
+from data_hub_call.dataHubCallCityVervePoP import DataHubCallCityVervePoP
+from data_hub_call.dataHubCallBTHub import DataHubCallBTHub
 
 class DataHubCallFactory:
     factories = {}

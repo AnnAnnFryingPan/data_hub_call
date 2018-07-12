@@ -1,5 +1,5 @@
 import os
-from selectedStreamsDirectory import SelectedStreamsDirectory
+from data_hub_call.selectedStreamsDirectory import SelectedStreamsDirectory
 
 class SelectedStreamsFiles(object):
     def __init__(self, data_sources_path):

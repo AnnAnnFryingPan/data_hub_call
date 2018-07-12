@@ -1,4 +1,4 @@
-from dataHubCall import DataHubCall
+from data_hub_call.dataHubCall import DataHubCall
 import requests
 import json
 

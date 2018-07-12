@@ -1,5 +1,5 @@
-from requestInfoList import RequestInfoList
-from requestInfoFetchFactory import RequestInfoFetchFactory
+from data_hub_call.requestInfoList import RequestInfoList
+from data_hub_call.requestInfoFetchFactory import RequestInfoFetchFactory
 from enum import Enum
 
 import json

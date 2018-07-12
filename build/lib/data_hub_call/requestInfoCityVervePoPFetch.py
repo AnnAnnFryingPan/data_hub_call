@@ -1,4 +1,4 @@
-from requestInfoCityVervePoP import RequestInfoCityVervePoP, Element_type
+from data_hub_call.requestInfoCityVervePoP import RequestInfoCityVervePoP, Element_type
 from enum import Enum
 import json
 from ast import literal_eval

@@ -1,4 +1,4 @@
-from requestInfoBTHub import RequestInfoBTHub, Feed_type, Request_type
+from data_hub_call.requestInfoBTHub import RequestInfoBTHub, Feed_type, Request_type
 from enum import Enum
 import json
 from ast import literal_eval

@@ -1,8 +1,8 @@
 # Polymorphic factory methods.
 from __future__ import generators
-from requestInfoBTHubFetch import RequestInfoBTHubFetch
-from requestInfoCityVervePoPFetch import RequestInfoCityVervePoPFetch
-from requestInfoTriangulumFetch import RequestInfoTriangulumFetch
+from data_hub_call.requestInfoBTHubFetch import RequestInfoBTHubFetch
+from data_hub_call.requestInfoCityVervePoPFetch import RequestInfoCityVervePoPFetch
+from data_hub_call.requestInfoTriangulumFetch import RequestInfoTriangulumFetch
 
 
 class RequestInfoFetchFactory:
