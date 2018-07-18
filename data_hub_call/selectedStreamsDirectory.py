@@ -89,8 +89,7 @@ class SelectedStreamsDirectory(object):
 
         if os.path.exists(os.path.dirname(self.directory)):
             with open(self.file_spec, "w+") as f_out:
-                f_out.writelines(new_file)
-                f_out.close()
+                json.dump(new_file, f_requests)
 
     def add_to_streams(self, stream_params):
         stream_href = stream_params['feed_info']['href']
@@ -111,7 +110,6 @@ class SelectedStreamsDirectory(object):
                     api_streams_json.append(stream_params)
             with open(self.file_spec, "w+") as f_requests:
                 json.dump(api_streams_json, f_requests)
-                #f_requests.close()
 
         except Exception as err:
             raise IOError('Unable to open streams file: ' + self.file_spec + ': ' + str(err))
