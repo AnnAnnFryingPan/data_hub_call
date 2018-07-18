@@ -99,18 +99,19 @@ class SelectedStreamsDirectory(object):
             os.makedirs(os.path.dirname(self.file_spec), exist_ok=True)
 
         try:
-            with open(self.file_spec, "w+")  as f_requests:
+            with open(self.file_spec)  as f_requests:
                 try:
                     api_streams_json = json.load(f_requests)
-                except:
+                except Exception as err:
                     api_streams_json = []
                 for api_stream in api_streams_json:
                     if api_stream['feed_info']['href'] == stream_href:
                         break
                 else:
                     api_streams_json.append(stream_params)
+            with open(self.file_spec, "w+") as f_requests:
                 json.dump(api_streams_json, f_requests)
-                f_requests.close()
+                #f_requests.close()
 
         except Exception as err:
             raise IOError('Unable to open streams file: ' + self.file_spec + ': ' + str(err))
@@ -125,16 +126,17 @@ class SelectedStreamsDirectory(object):
             os.makedirs(os.path.dirname(self.file_spec), exist_ok=True)
 
         try:
-            with open(self.file_spec, "w+")  as f_requests:
+            with open(self.file_spec) as f_requests:
                 try:
                     api_streams_json = json.load(f_requests)
                 except:
                     api_streams_json = []
                 for api_stream in api_streams_json:
                     if api_stream['feed_info']['href'] == stream_href:
-                        del api_streams
+                        api_streams_json.remove(api_stream)
+            with open(self.file_spec, "w+") as f_requests:
                 json.dump(api_streams_json, f_requests)
-                f_requests.close()
+
         except Exception as err:
             raise IOError('Unable to open streams file: ' + self.file_spec + ': ' + str(err))
 
