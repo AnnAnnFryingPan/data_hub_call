@@ -1,5 +1,4 @@
 import os
-from data_hub_call.selectedStreamsDirectory import SelectedStreamsDirectory
 
 class SelectedStreamsFiles(object):
     def __init__(self, data_sources_path):
@@ -35,7 +34,6 @@ class SelectedStreamsFiles(object):
     def get_api_streams(self):
         result = []
         for dir_key in self.stream_directories:
-            #requests = self.stream_directories[dir_key].api_streams.requests
             result.extend(self.stream_directories[dir_key].api_streams.requests)
         return result
 
