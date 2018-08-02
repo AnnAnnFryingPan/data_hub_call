@@ -1,6 +1,5 @@
 README.md
 setup.py
-data_hub_call/__init__.py
 data_hub_call/dataHubCall.py
 data_hub_call/dataHubCallBTHub.py
 data_hub_call/dataHubCallCityVervePoP.py
@@ -18,10 +17,6 @@ data_hub_call/requestInfoFetchList.py
 data_hub_call/requestInfoList.py
 data_hub_call/requestInfoTriangulum.py
 data_hub_call/requestInfoTriangulumFetch.py
-data_hub_call/selectedStreamsDirectory.py
-data_hub_call/selectedStreamsFiles.py
-data_hub_call/selectedStreamsFromDBHubs.py
-data_hub_call/selectedStreamsFromFileHubs.py
 data_hub_call.egg-info/PKG-INFO
 data_hub_call.egg-info/SOURCES.txt
 data_hub_call.egg-info/dependency_links.txt

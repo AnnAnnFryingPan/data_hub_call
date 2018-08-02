@@ -27,9 +27,10 @@ class HypercatCall(object):
             else:
                 raise Exception
         except Exception as err:
-            result['ok'] = False
-            result['content'] = err
-            return result
+            #result['ok'] = False
+            #result['content'] = err
+            #return result
+            raise err
 
         try:
             result_content = search_result.json()
