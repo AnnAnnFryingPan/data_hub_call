@@ -5,8 +5,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/lib/data_hub_call/hypercatCall.py" beforeDir="false" afterPath="$PROJECT_DIR$/build/lib/data_hub_call/hypercatCall.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_hub_call.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/data_hub_call.egg-info/PKG-INFO" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_hub_call.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data_hub_call.egg-info/SOURCES.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_hub_call/hypercatCall.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_hub_call/hypercatCall.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/data_hub_call-0.9-py3-none-any.whl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/data_hub_call-0.9.tar.gz" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -521,11 +521,11 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32829374" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.204" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.24838012" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23052295" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.24838012" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23052295" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.32977587" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24983211" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39866668" />

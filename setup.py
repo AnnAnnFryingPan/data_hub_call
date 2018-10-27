@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='data_hub_call',
-      version='0.9',
+      version='0.10',
       description='Wraps requests and responses for making calls to hub',
       url='https://github.com/AnnAnnFryingPan/data_hub_call',
       author='Ann Gledson',

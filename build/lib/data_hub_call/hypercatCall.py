@@ -27,9 +27,6 @@ class HypercatCall(object):
             else:
                 raise Exception
         except Exception as err:
-            #result['ok'] = False
-            #result['content'] = err
-            #return result
             raise err
 
         try:
@@ -41,11 +38,8 @@ class HypercatCall(object):
                 try:
                     result_content = search_result.content
                 except Exception as err2:
-                    result['ok'] = False
-                    result['content'] = err2
-                    return result
+                    raise err2
 
-        result['ok'] = search_result.ok
         result['content'] = result_content
 
         return result
